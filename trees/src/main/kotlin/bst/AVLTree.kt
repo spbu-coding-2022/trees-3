@@ -1,0 +1,4 @@
+package bst
+
+class AVLTree {
+}
