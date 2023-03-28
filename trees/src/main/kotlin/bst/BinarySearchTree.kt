@@ -2,7 +2,7 @@ package bst
 
 import bst.nodes.BSTNode
 
-class BinarySearchTree<K: Comparable<K>, V>: Tree<K, V> {
+open class BinarySearchTree<K: Comparable<K>, V>: Tree<K, V> {
     var rootNode: BSTNode<K, V>? = null
     override fun insert(key: K, value: V) {
         //add element
