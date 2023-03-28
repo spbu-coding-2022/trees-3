@@ -17,7 +17,6 @@ class BinarySearchTree<K: Comparable<K>, V>: Tree<K, V> {
         //make element as a root, if root is null
         //if root is not null it adds element to left or right branch
         //if left or right is not null - it checks it, and adds it if right or left is null
-//        TODO("Not yet implemented")
     }
 
     private fun insertRecursive(currentNode: BSTNode<K, V>, newNode: BSTNode<K, V>){
@@ -44,18 +43,38 @@ class BinarySearchTree<K: Comparable<K>, V>: Tree<K, V> {
         TODO("Not yet implemented")
     }
 
-    override fun find(key: K): V {
+    override fun find(key: K): Boolean {
+        return this.search(this.rootNode, key) != null
+//        return this.search(this.rootNode, key)
         //this method gives element by key
-        TODO("Not yet implemented")
     }
+    private fun search(currentNode: BSTNode<K, V>?,  key: K): BSTNode<K, V>? {
 
-    override fun clear() {
-        //clear tree
-        TODO("Not yet implemented")
+        if (currentNode==null){
+            return null
+        }
+        if (currentNode.key == key) {
+            return currentNode
+        }
+
+        if (currentNode.key < key) {
+           return search(currentNode.right, key)
+        }
+        if (currentNode.key > key) {
+           return search(currentNode.left, key)
+        }
+        else{
+            return null
+        }
+//        return currentNode
     }
 
     fun symmetricalTreeTraversal(){
 
+    }
+
+    override fun clear() {
+        TODO("Not yet implemented")
     }
 }
 
@@ -65,6 +84,7 @@ fun main(){
     test_tree.insert(234, "afaraf")
     test_tree.insert(235, "afaraf")
     test_tree.insert(232, "afaraf")
+    val res = test_tree.find(239)
     println("afadf")
 //    test_tree.rootNode = BSTNode(123, "erefe")
 //    val test_1 = mutableListOf<Int>(12341, 324)
