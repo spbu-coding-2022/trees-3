@@ -9,6 +9,12 @@ class RedBlackTree<K : Comparable<K>, V> : BalancingTree<K, V>() {
         return node?.red == true
     }
 
+    override fun find(key: K): Boolean {
+        return super.search(root, key) != null
+        // return this.search(this.rootNode, key)
+        // this method gives element by key
+    }
+
     override fun insert(key: K, value: V) {
         insertNode(key, value)
     }

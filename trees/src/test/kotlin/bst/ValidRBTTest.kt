@@ -11,9 +11,9 @@ class ValidRBTTest {
         tree.insert(1, "One")
         tree.insert(2, "Two")
         tree.insert(3, "Three")
-        assertEquals("One", tree.find(1))
-        assertEquals("Two", tree.find(2))
-        assertEquals("Three", tree.find(3))
+        assertEquals(true, tree.find(1))
+        assertEquals(true, tree.find(2))
+        assertEquals(true, tree.find(3))
     }
 
     @Test
@@ -23,8 +23,8 @@ class ValidRBTTest {
         tree.insert(2, "Two")
         tree.insert(3, "Three")
         tree.remove(2)
-        assertEquals(null, tree.find(2))
-        assertEquals("One", tree.find(1))
-        assertEquals("Three", tree.find(3))
+        assertEquals(false, tree.find(2))
+        assertEquals(true, tree.find(1))
+        assertEquals(true, tree.find(3))
     }
 }
