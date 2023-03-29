@@ -8,5 +8,5 @@
  */
 
 rootProject.name = "trees-3"
-include("app",)
+include("app")
 include("trees")

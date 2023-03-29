@@ -2,7 +2,7 @@ package bst
 
 import bst.nodes.TreeNode
 
-abstract class BalancingTree<K: Comparable<K>, V>: BinarySearchTree<K, V>() {
+abstract class BalancingTree<K : Comparable<K>, V> : BinarySearchTree<K, V>() {
     protected fun <SpecNode : TreeNode<K, V, SpecNode>> rotateLeft(node: SpecNode): SpecNode {
         val right = node.right
         node.right = right?.left

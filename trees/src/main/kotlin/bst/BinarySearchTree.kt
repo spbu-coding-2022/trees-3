@@ -2,7 +2,7 @@ package bst
 
 import bst.nodes.BSTNode
 
-open class BinarySearchTree<K: Comparable<K>, V>: Tree<K, V> {
+open class BinarySearchTree<K : Comparable<K>, V> : Tree<K, V> {
     var rootNode: BSTNode<K, V>? = null
     override fun insert(key: K, value: V) {
         val newNode = BSTNode(key, value)
@@ -38,18 +38,17 @@ open class BinarySearchTree<K: Comparable<K>, V>: Tree<K, V> {
         }
     }
 
-    override fun remove(key: K, value: V) {
-        //remove node by key
+    override fun remove(key: K) {
+        // remove node by key
         TODO("Not yet implemented")
     }
-
     override fun find(key: K): Boolean {
         return this.search(this.rootNode, key) != null
-//        return this.search(this.rootNode, key)
-        //this method gives element by key
+        // return this.search(this.rootNode, key)
+        // this method gives element by key
     }
+    
     private fun search(currentNode: BSTNode<K, V>?,  key: K): BSTNode<K, V>? {
-
         if (currentNode==null){
             return null
         }
@@ -69,8 +68,8 @@ open class BinarySearchTree<K: Comparable<K>, V>: Tree<K, V> {
 //        return currentNode
     }
 
-    fun symmetricalTreeTraversal(){
-
+    fun symmetricalTreeTraversal() {
+        TODO()
     }
 
     override fun clear() {
@@ -78,8 +77,7 @@ open class BinarySearchTree<K: Comparable<K>, V>: Tree<K, V> {
     }
 }
 
-
-fun main(){
+fun main() {
     val test_tree = BinarySearchTree<Int, String>()
     test_tree.insert(234, "afaraf")
     test_tree.insert(235, "afaraf")
