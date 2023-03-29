@@ -1,9 +1,10 @@
 package bst
 
 import bst.nodes.BSTNode
+import bst.nodes.TreeNode
 
 open class BinarySearchTree<K : Comparable<K>, V> : Tree<K, V> {
-    var rootNode: BSTNode<K, V>? = null
+    private var rootNode: BSTNode<K, V>? = null
     override fun insert(key: K, value: V) {
         val newNode = BSTNode(key, value)
         if (this.rootNode === null){
@@ -43,13 +44,13 @@ open class BinarySearchTree<K : Comparable<K>, V> : Tree<K, V> {
         TODO("Not yet implemented")
     }
     override fun find(key: K): Boolean {
-        return this.search(this.rootNode, key) != null
+        return search(rootNode, key) != null
         // return this.search(this.rootNode, key)
         // this method gives element by key
     }
     
-    private fun search(currentNode: BSTNode<K, V>?,  key: K): BSTNode<K, V>? {
-        if (currentNode==null){
+    protected fun <SpecNode : TreeNode<K, V, SpecNode>, K : Comparable<K>> search (currentNode: SpecNode?, key: K): SpecNode? {
+        if (currentNode == null){
             return null
         }
         if (currentNode.key == key) {
@@ -82,7 +83,7 @@ fun main() {
     test_tree.insert(234, "afaraf")
     test_tree.insert(235, "afaraf")
     test_tree.insert(232, "afaraf")
-    val res = test_tree.find(239)
+    val res = test_tree.find(235)
     println("afadf")
 //    test_tree.rootNode = BSTNode(123, "erefe")
 //    val test_1 = mutableListOf<Int>(12341, 324)
