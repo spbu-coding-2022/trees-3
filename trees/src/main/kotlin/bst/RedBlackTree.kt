@@ -86,7 +86,7 @@ class RedBlackTree<K: Comparable<K>, V>: BalancingTree<K, V>() {
         return current
     }
 
-    override fun remove(key: K, value: V) {
+    override fun remove(key: K) {
 
     }
     private fun removeNode(node: RBTNode<K, V>): RBTNode<K, V> {

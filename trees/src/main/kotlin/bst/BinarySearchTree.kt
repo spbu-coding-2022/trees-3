@@ -12,7 +12,7 @@ open class BinarySearchTree<K: Comparable<K>, V>: Tree<K, V> {
         TODO("Not yet implemented")
     }
 
-    override fun remove(key: K, value: V) {
+    override fun remove(key: K) {
         //remove node by key
         TODO("Not yet implemented")
     }
