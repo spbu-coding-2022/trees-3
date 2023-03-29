@@ -4,7 +4,7 @@ import bst.nodes.RBTNode
 
 class RedBlackTree<K: Comparable<K>, V>: Tree<K, V> {
 
-    override fun find(key: K): V {
+    override fun find(key: K): Boolean{
         TODO("Not yet implemented")
     }
 
