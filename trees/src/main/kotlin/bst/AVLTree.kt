@@ -1,4 +1,3 @@
 package bst
 
-class AVLTree {
-}
+class AVLTree

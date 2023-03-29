@@ -1,4 +1,3 @@
 package bst.nodes
 
-class AVLNode {
-}
+class AVLNode
