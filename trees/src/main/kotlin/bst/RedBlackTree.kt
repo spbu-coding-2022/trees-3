@@ -9,13 +9,6 @@ class RedBlackTree<K: Comparable<K>, V>: BalancingTree<K, V>() {
         return node?.red == true
     }
 
-    override fun find(key: K): V {
-        TODO("Not yet implemented")
-    }
-
-    override fun clear() {
-        TODO("Not yet implemented")
-    }
     override fun insert(key: K, value: V) {
         insertNode(key, value)
     }
