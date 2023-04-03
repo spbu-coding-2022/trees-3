@@ -53,7 +53,7 @@ abstract class AbstractBST<K: Comparable<K>, V, Self: BinaryNode<K, V, Self>> : 
         } else if (key == node.key) {
             node.value
         } else {
-            if (node.key < key)
+            if (key < node.key)
                 findNode(node.left, key)
             else
                 findNode(node.right, key)
