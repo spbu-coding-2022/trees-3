@@ -19,77 +19,105 @@ class RedBlackTree<K : Comparable<K>, V> : BalancingTree<K, V>() {
         insertNode(key, value)
     }
 
-    private fun insertNode(key: K, value: V): RBTNode<K, V> {
+    fun insertNode(key: K, value: V) {
         if (root == null) {
-            root = RBTNode(key, value, true)
-            return root!!
-        }
-
-        var node = root
-        var parent: RBTNode<K, V>? = null
-
-        while (node != null) {
-            parent = node
-
-            when {
-                key < node.key -> node = node.left
-                key > node.key -> node = node.right
-                else -> {
-                    node.value = value
-                    return node
-                }
-            }
-        }
-
-        val newNode = RBTNode(key, value, false)
-        if (key < parent!!.key) {
-            parent.left = newNode
+            /* Empty tree case */
+            root = RBTNode(key, value, false)
+            return
         } else {
-            parent.right = newNode
-        }
+            val head = RBTNode(key, value) // False tree root
 
-        var current = newNode
-        while (isRed(current) && isRed(current.left)) {
-            var sibling = current.right
-            if (isRed(sibling)) {
-                current.red = true
-                sibling!!.red = false
-                current = rotateLeft(current)
+            var grandparent: RBTNode<K, V>? = null // Grandparent
+            var t: RBTNode<K, V> = head // Parent
+            var parent: RBTNode<K, V>? = null // Iterator
 
-                current.red = current.left!!.red
-                current.left!!.red = true
+            t.right = root
+            var q: RBTNode<K, V>? = t.right // Parent
+            var dir = false // false - left, true - right
+            var last = false
 
-                sibling = current.right
-            }
-            if (!isRed(sibling?.left) && !isRed(sibling?.right)) {
-                sibling!!.red = true
-                current = parent
-            } else {
-                if (!isRed(sibling?.right)) {
-                    sibling!!.left?.red = false
-                    sibling.red = true
-                    current = rotateRight(sibling)
-
-                    current.red = current.right!!.red
-                    current.right!!.red = true
-
-                    sibling = current.right
+            // Search down the tree
+            while (true) {
+                if (q == null) {
+                    // Insert new node at the bottom
+                    q = RBTNode(key, value)
+                    if (dir) parent?.right = q else parent?.left = q
+                } else if (isRed(q.left) && isRed(q.right)) {
+                    // Color flip
+                    q.red = true
+                    q.left!!.red = false
+                    q.right!!.red = false
                 }
-                sibling!!.red = current.red
-                current.red = true
-                sibling.right?.red = true
-                current = rotateLeft(current)
 
-                current.red = current.left!!.red
-                current.left!!.red = true
+                // Fix red violation
+                if (isRed(q) && isRed(parent)) {
+                    val dir2 = if (t.child(true) == grandparent) true else false// === or == hmmm
+                    if (dir2) {
+                        if (q == parent!!.child(last)) {
+                            t.right = rotate(grandparent!!, !last)
+                        } else {
+                            t.right = doubleRotate(grandparent!!, !last)
 
-                break
+                        }
+                    }
+                    else {
+                        if (q == parent!!.child(last)) {
+                            t.left = rotate(grandparent!!, !last)
+                        } else {
+                            t.left = doubleRotate(grandparent!!, !last)
+
+                        }
+                    }
+                }
+
+                // Stop if found
+                if (q.key == key) {
+                    q!!.value = value
+                    break
+                }
+
+                last = dir
+                dir = if (q.key < key) true else false
+
+                // Update helpers
+                if (grandparent != null) {
+                    t = grandparent
+                }
+
+                grandparent = parent
+                parent = q
+                q = q.child(dir)
             }
-        }
 
-        root!!.red = true
-        return current
+            // Update root
+            root = head.right
+        }
     }
+
+
+    private fun rotate(node: RBTNode<K,V>, dir: Boolean): RBTNode<K, V> {
+        val save: RBTNode<K, V>
+        if (dir) {
+            save = rotateRight(node)
+        }
+        else {
+            save = rotateLeft(node)
+        }
+        node.red = true
+        save.red = false
+        return save
+    }
+
+    private fun doubleRotate(node: RBTNode<K,V>, dir: Boolean): RBTNode<K, V> {
+        if (dir) {
+            node.left = rotate(node.left!!, false)
+        }
+        else {
+            node.right = rotate(node.right!!, true)
+        }
+        return rotate(node, dir)
+    }
+
 
     override fun remove(key: K) {
         TODO()

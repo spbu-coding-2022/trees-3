@@ -8,4 +8,6 @@ class RBTNode<K : Comparable<K>, V> (
 ) : TreeNode<K, V, RBTNode<K, V>> {
     override var left: RBTNode<K, V>? = null
     override var right: RBTNode<K, V>? = null
+
+    internal fun child(f: Boolean) = if (f) right else left
 }
