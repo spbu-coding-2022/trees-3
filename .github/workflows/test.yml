@@ -7,10 +7,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      - name: Setup Java SDK
-      - uses: actions/setup-java@3
-        with:
-          java-version: '16'
+      - name: Setup Gradle
+        uses: gradle/gradle-build-action@v2
       - name: Build with Gradle
         run: ./gradlew build
       - name: Cache Gradle packages
