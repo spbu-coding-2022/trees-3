@@ -12,9 +12,9 @@ class ValidRBTTest {
         tree.insert(5, "E")
         tree.insert(1, "A")
         tree.insert(18, "R")
-        assertEquals(true, tree.find(5))
-        assertEquals(true, tree.find(1))
-        assertEquals(false, tree.find(10))
+        assertEquals("E", tree.find(5))
+        assertEquals("A", tree.find(1))
+        assertEquals(null, tree.find(10))
     }
 
     @Test
@@ -29,7 +29,7 @@ class ValidRBTTest {
         assertEquals("R", tree.find(18))
         assertEquals(null, tree.find(1))
         tree.remove(18)
-        assertEquals("E'", tree.find(5))
+        assertEquals("E", tree.find(5))
         assertEquals(null, tree.find(18))
     }
 }

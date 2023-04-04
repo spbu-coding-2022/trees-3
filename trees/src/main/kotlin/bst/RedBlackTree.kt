@@ -81,23 +81,25 @@ class RedBlackTree<K : Comparable<K>, V> : BalancingTree<K, V, RBTNode<K, V>>() 
             }
 
             // Update root
-            root = head.right
+            rootNode = head.right
         }
+        rootNode!!.red = false
     }
     override fun remove(key: K) {
         removeNode(key)
     }
     private fun removeNode(key: K): Int {
-        if (root != null) {
+        if (rootNode != null) {
             val head = RBTNode(key, "" as V) // False tree root
             var q: RBTNode<K, V>? = head
-            var p: RBTNode<K, V>? = null
-            var g: RBTNode<K, V>?  // Helpers
+            var parent: RBTNode<K, V>? = null
+            var grandparent: RBTNode<K, V>?  // Helpers
             var f: RBTNode<K, V>? = null /* Found item */
             var dir = true
 
+            var del: Boolean = true
 
-            q?.right = root
+            q?.right = rootNode
 
             /*
               Search and push a red node down
@@ -107,57 +109,57 @@ class RedBlackTree<K : Comparable<K>, V> : BalancingTree<K, V, RBTNode<K, V>>() 
                 val last = dir
 
                 /* Move the helpers down */
-                g = p
-                p = q
-                q = q.child(dir)
+                grandparent = parent
+                parent = q
+                q = parent.child(dir)
                 dir = q!!.key < key
 
                 /*
-                  Save the node with matching data and keep
+                  Save parent of the node with matching data and keep
                   going; we'll do removal tasks at the end
                 */
-                if (q.key == key)
-                    f = q
-
+                if (q.key == key) {
+                    f = parent
+                    del = last
+                }
                 /* Push the red node down with rotations and color flips */
                 if (!isRed(q) && !isRed(q.child(dir))) {
                     if (isRed(q.child(!dir))) {
                         if (last) {
-                            p.right = rotate(q, dir)
+                            parent.right = rotate(q, dir)
                         } else {
-                            p.left = rotate(q, dir)
+                            parent.left = rotate(q, dir)
                         }
-                        p = p.child(last)
-                    }
-                    else if (!isRed(q.child(!dir))) {
-                        val s = p.child(!last)
+                        parent = parent.child(last)
+                    } else if (!isRed(q.child(!dir))) {
+                        val s = parent.child(!last)
 
                         if (s != null) {
                             if (!isRed(s.child(!last)) && !isRed(s.child(last))) {
                                 /* Color flip */
-                                p.red = false
+                                parent.red = false
                                 s.red = true
                                 q.red = true
                             } else {
-                                val dir2 = (g!!.right == p)
+                                val dir2 = (grandparent!!.right == parent)
 
-                                if (isRed(s.child(last)))
+                                if (isRed(s.child(last))) {
                                     if (dir2) {
-                                        g.right = doubleRotate(p, last)
+                                        grandparent.right = doubleRotate(parent, last)
                                     } else {
-                                        g.left = doubleRotate(p, last)
+                                        grandparent.left = doubleRotate(parent, last)
                                     }
-                                else if (isRed(s.child(!last)))
+                                } else if (isRed(s.child(!last)))
                                     if (dir2) {
-                                        g.right = rotate(p, last)
+                                        grandparent.right = rotate(parent, last)
                                     } else {
-                                        g.left = rotate(p, last)
+                                        grandparent.left = rotate(parent, last)
                                     }
                                 /* Ensure correct coloring */
                                 q.red = true
-                                g.child(dir2)!!.red = true
-                                g.child(dir2)!!.left!!.red = false
-                                g.child(dir2)!!.right!!.red = false
+                                grandparent.child(dir2)!!.red = true
+                                grandparent.child(dir2)!!.left!!.red = false
+                                grandparent.child(dir2)!!.right!!.red = false
                             }
                         }
                     }
@@ -166,20 +168,26 @@ class RedBlackTree<K : Comparable<K>, V> : BalancingTree<K, V, RBTNode<K, V>>() 
 
             /* Replace and remove the saved node */
             if (f != null) {
-                if (p!!.right == q) {
-                    p.right = q.child(q.left == null)
+                if (del) {
+                    f.right = q
                 }
                 else {
-                    p.left = q.child(q.left == null)
+                    f.left = q
+                }
+                if (parent!!.right == q) {
+                    parent.right = q.child(q.left == null)
+                }
+                else {
+                    parent.left = q.child(q.left == null)
                 }
             }
 
             /* Update the root (it may be different) */
-            root = head.child(true)
+            rootNode = head.child(true)
 
             /* Make the root black for simplified logic */
-            if (root != null)
-                root!!.red = false
+            if (rootNode != null)
+                rootNode!!.red = false
         }
         return 1
     }
