@@ -2,9 +2,7 @@ package bst
 
 import bst.nodes.RBTNode
 
-class RedBlackTree<K : Comparable<K>, V> : BalancingTree<K, V>() {
-    private var root: RBTNode<K, V>? = null
-
+class RedBlackTree<K : Comparable<K>, V> : BalancingTree<K, V, RBTNode<K, V>>() {
     private fun isRed(node: RBTNode<K, V>?): Boolean {
         return node?.red == true
     }
@@ -14,12 +12,12 @@ class RedBlackTree<K : Comparable<K>, V> : BalancingTree<K, V>() {
     }
 
     private fun insertNode(key: K, value: V): RBTNode<K, V> {
-        if (root == null) {
-            root = RBTNode(key, value, true)
-            return root!!
+        if (rootNode == null) {
+            rootNode = RBTNode(key, value, true)
+            return rootNode!!
         }
 
-        var node = root
+        var node = rootNode
         var parent: RBTNode<K, V>? = null
 
         while (node != null) {
@@ -81,7 +79,7 @@ class RedBlackTree<K : Comparable<K>, V> : BalancingTree<K, V>() {
             }
         }
 
-        root!!.red = true
+        rootNode!!.red = true
         return current
     }
 
@@ -91,5 +89,9 @@ class RedBlackTree<K : Comparable<K>, V> : BalancingTree<K, V>() {
 
     private fun removeNode(node: RBTNode<K, V>): RBTNode<K, V> {
         TODO()
+    }
+
+    override fun initNode(key: K, value: V): RBTNode<K, V> {
+        TODO("Not yet implemented")
     }
 }
