@@ -13,7 +13,7 @@ dependencies {
     testImplementation("org.jetbrains.kotlin:kotlin-test-junit5")
 
     // Use the JUnit 5 integration.
-    testImplementation("org.junit.jupiter:junit-jupiter-engine:5.9.1")
+    testImplementation("org.junit.jupiter:junit-jupiter-engine:5.9.2")
 }
 
 tasks.named<Test>("test") {

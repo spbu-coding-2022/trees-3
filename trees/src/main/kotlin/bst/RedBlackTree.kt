@@ -2,17 +2,9 @@ package bst
 
 import bst.nodes.RBTNode
 
-class RedBlackTree<K : Comparable<K>, V> : BalancingTree<K, V>() {
-    private var root: RBTNode<K, V>? = null
-
+class RedBlackTree<K : Comparable<K>, V> : BalancingTree<K, V, RBTNode<K, V>>() {
     private fun isRed(node: RBTNode<K, V>?): Boolean {
         return node?.red == true
-    }
-
-    override fun find(key: K): Boolean {
-        return super.search(root, key) != null
-        // return this.search(this.rootNode, key)
-        // this method gives element by key
     }
 
     override fun insert(key: K, value: V) {
@@ -20,9 +12,9 @@ class RedBlackTree<K : Comparable<K>, V> : BalancingTree<K, V>() {
     }
 
     private fun insertNode(key: K, value: V) {
-        if (root == null) {
+        if (rootNode == null) {
             /* Empty tree case */
-            root = RBTNode(key, value, false)
+            rootNode = RBTNode(key, value, false)
             return
         } else {
             val head = RBTNode(key, value) // False tree root
@@ -31,7 +23,7 @@ class RedBlackTree<K : Comparable<K>, V> : BalancingTree<K, V>() {
             var t: RBTNode<K, V> = head // Parent
             var parent: RBTNode<K, V>? = null // Iterator
 
-            t.right = root
+            t.right = rootNode
             var q: RBTNode<K, V>? = t.right // Parent
             var dir = false // false - left, true - right
             var last = false
@@ -48,7 +40,6 @@ class RedBlackTree<K : Comparable<K>, V> : BalancingTree<K, V>() {
                     q.left!!.red = false
                     q.right!!.red = false
                 }
-
                 // Fix red violation
                 if (isRed(q) && isRed(parent)) {
                     val dir2 = t.child(true) == grandparent// === or == hmmm
@@ -189,9 +180,7 @@ class RedBlackTree<K : Comparable<K>, V> : BalancingTree<K, V>() {
             /* Make the root black for simplified logic */
             if (root != null)
                 root!!.red = false
-
         }
-
         return 1
     }
 
@@ -214,5 +203,9 @@ class RedBlackTree<K : Comparable<K>, V> : BalancingTree<K, V>() {
             node.right = rotate(node.right!!, true)
         }
         return rotate(node, dir)
+    }
+
+    override fun initNode(key: K, value: V): RBTNode<K, V> {
+        TODO("Not yet implemented")
     }
 }

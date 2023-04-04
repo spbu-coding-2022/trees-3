@@ -1,15 +1,15 @@
 package bst
 
-import bst.nodes.TreeNode
+import bst.nodes.BinaryNode
 
-abstract class BalancingTree<K : Comparable<K>, V> : BinarySearchTree<K, V>() {
-    protected fun <SpecNode : TreeNode<K, V, SpecNode>> rotateLeft(node: SpecNode): SpecNode {
+abstract class BalancingTree<K: Comparable<K>, V, Self: BinaryNode<K, V, Self>>: AbstractBST<K, V, Self>() {
+    protected open fun rotateLeft(node: Self): Self {
         val right = node.right
         node.right = right?.left
         right?.left = node
         return right!!
     }
-    protected fun <SpecNode : TreeNode<K, V, SpecNode>> rotateRight(node: SpecNode): SpecNode {
+    protected open fun rotateRight(node: Self): Self {
         val left = node.left
         node.left = left?.right
         left?.right = node
