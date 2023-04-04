@@ -20,12 +20,16 @@ class ValidRBTTest {
     @Test
     fun testDelete() {
         val tree = RedBlackTree<Int, String>()
-        tree.insert(1, "One")
-        tree.insert(2, "Two")
-        tree.insert(3, "Three")
-        tree.remove(2)
-        assertEquals(false, tree.find(2))
-        assertEquals(true, tree.find(1))
-        assertEquals(true, tree.find(3))
+        tree.insert(19, "S")
+        tree.insert(5, "E")
+        tree.insert(1, "A")
+        tree.insert(18, "R")
+        tree.remove(1)
+        tree.remove(19)
+        assertEquals("R", tree.find(18))
+        assertEquals(null, tree.find(1))
+        tree.remove(18)
+        assertEquals("E'", tree.find(5))
+        assertEquals(null, tree.find(18))
     }
 }

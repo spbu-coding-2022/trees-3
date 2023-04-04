@@ -19,7 +19,7 @@ class RedBlackTree<K : Comparable<K>, V> : BalancingTree<K, V>() {
         insertNode(key, value)
     }
 
-    fun insertNode(key: K, value: V) {
+    private fun insertNode(key: K, value: V) {
         if (root == null) {
             /* Empty tree case */
             root = RBTNode(key, value, false)
@@ -51,7 +51,7 @@ class RedBlackTree<K : Comparable<K>, V> : BalancingTree<K, V>() {
 
                 // Fix red violation
                 if (isRed(q) && isRed(parent)) {
-                    val dir2 = if (t.child(true) == grandparent) true else false// === or == hmmm
+                    val dir2 = t.child(true) == grandparent// === or == hmmm
                     if (dir2) {
                         if (q == parent!!.child(last)) {
                             t.right = rotate(grandparent!!, !last)
@@ -72,12 +72,12 @@ class RedBlackTree<K : Comparable<K>, V> : BalancingTree<K, V>() {
 
                 // Stop if found
                 if (q.key == key) {
-                    q!!.value = value
+                    q.value = value
                     break
                 }
 
                 last = dir
-                dir = if (q.key < key) true else false
+                dir = q.key < key
 
                 // Update helpers
                 if (grandparent != null) {
@@ -93,15 +93,113 @@ class RedBlackTree<K : Comparable<K>, V> : BalancingTree<K, V>() {
             root = head.right
         }
     }
+    override fun remove(key: K) {
+        removeNode(key)
+    }
+    private fun removeNode(key: K): Int {
+        if (root != null) {
+            val head = RBTNode(key, "" as V) // False tree root
+            var q: RBTNode<K, V>? = head
+            var p: RBTNode<K, V>? = null
+            var g: RBTNode<K, V>?  // Helpers
+            var f: RBTNode<K, V>? = null /* Found item */
+            var dir = true
 
+
+            q?.right = root
+
+            /*
+              Search and push a red node down
+              to fix red violations as we go
+            */
+            while (q!!.child(dir) != null) {
+                val last = dir
+
+                /* Move the helpers down */
+                g = p
+                p = q
+                q = q.child(dir)
+                dir = q!!.key < key
+
+                /*
+                  Save the node with matching data and keep
+                  going; we'll do removal tasks at the end
+                */
+                if (q.key == key)
+                    f = q
+
+                /* Push the red node down with rotations and color flips */
+                if (!isRed(q) && !isRed(q.child(dir))) {
+                    if (isRed(q.child(!dir))) {
+                        if (last) {
+                            p.right = rotate(q, dir)
+                        } else {
+                            p.left = rotate(q, dir)
+                        }
+                        p = p.child(last)
+                    }
+                    else if (!isRed(q.child(!dir))) {
+                        val s = p.child(!last)
+
+                        if (s != null) {
+                            if (!isRed(s.child(!last)) && !isRed(s.child(last))) {
+                                /* Color flip */
+                                p.red = false
+                                s.red = true
+                                q.red = true
+                            } else {
+                                val dir2 = (g!!.right == p)
+
+                                if (isRed(s.child(last)))
+                                    if (dir2) {
+                                        g.right = doubleRotate(p, last)
+                                    } else {
+                                        g.left = doubleRotate(p, last)
+                                    }
+                                else if (isRed(s.child(!last)))
+                                    if (dir2) {
+                                        g.right = rotate(p, last)
+                                    } else {
+                                        g.left = rotate(p, last)
+                                    }
+                                /* Ensure correct coloring */
+                                q.red = true
+                                g.child(dir2)!!.red = true
+                                g.child(dir2)!!.left!!.red = false
+                                g.child(dir2)!!.right!!.red = false
+                            }
+                        }
+                    }
+                }
+            }
+
+            /* Replace and remove the saved node */
+            if (f != null) {
+                if (p!!.right == q) {
+                    p.right = q.child(q.left == null)
+                }
+                else {
+                    p.left = q.child(q.left == null)
+                }
+            }
+
+            /* Update the root (it may be different) */
+            root = head.child(true)
+
+            /* Make the root black for simplified logic */
+            if (root != null)
+                root!!.red = false
+
+        }
+
+        return 1
+    }
 
     private fun rotate(node: RBTNode<K,V>, dir: Boolean): RBTNode<K, V> {
-        val save: RBTNode<K, V>
-        if (dir) {
-            save = rotateRight(node)
-        }
-        else {
-            save = rotateLeft(node)
+        val save: RBTNode<K, V> = if (dir) {
+            rotateRight(node)
+        } else {
+            rotateLeft(node)
         }
         node.red = true
         save.red = false
@@ -116,14 +214,5 @@ class RedBlackTree<K : Comparable<K>, V> : BalancingTree<K, V>() {
             node.right = rotate(node.right!!, true)
         }
         return rotate(node, dir)
-    }
-
-
-    override fun remove(key: K) {
-        TODO()
-    }
-
-    private fun removeNode(node: RBTNode<K, V>): RBTNode<K, V> {
-        TODO()
     }
 }
