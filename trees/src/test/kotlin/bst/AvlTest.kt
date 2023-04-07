@@ -65,10 +65,74 @@ class AvlTreeTest {
         }
 
         @Test
+        fun `Left-left case`() {
+            tree.insert(3, 3)
+            tree.insert(2, 2)
+            tree.insert(1, 1)
+
+            assertEquals(2, tree.rootNode?.key)
+            assertEquals(1, tree.rootNode?.left?.key)
+            assertEquals(3, tree.rootNode?.right?.key)
+
+            assertEquals(3, countNodes(tree.rootNode))
+            assertTrue(isAvl(tree.rootNode))
+        }
+
+        @Test
+        fun `Left-right case`() {
+            tree.insert(5, 5)
+            tree.insert(3, 3)
+            tree.insert(4, 4)
+
+            assertEquals(4, tree.rootNode?.key)
+            assertEquals(3, tree.rootNode?.left?.key)
+            assertEquals(5, tree.rootNode?.right?.key)
+
+            assertEquals(3, countNodes(tree.rootNode))
+            assertTrue(isAvl(tree.rootNode))
+        }
+
+        @Test
+        fun `Right-right case`() {
+            tree.insert(3, 3)
+            tree.insert(4, 4)
+            tree.insert(5, 5)
+
+            assertEquals(4, tree.rootNode?.key)
+            assertEquals(3, tree.rootNode?.left?.key)
+            assertEquals(5, tree.rootNode?.right?.key)
+
+            assertEquals(3, countNodes(tree.rootNode))
+            assertTrue(isAvl(tree.rootNode))
+
+        }
+
+        @Test
+        fun `Right-left case`() {
+            tree.insert(3, 3)
+            tree.insert(5, 5)
+            tree.insert(4, 4)
+
+            assertEquals(4, tree.rootNode?.key)
+            assertEquals(3, tree.rootNode?.left?.key)
+            assertEquals(5, tree.rootNode?.right?.key)
+
+            assertEquals(3, countNodes(tree.rootNode))
+            assertTrue(isAvl(tree.rootNode))
+        }
+
+        @Test
         fun `Same key inserted twice`() {
             tree.insert(1, 1)
             tree.insert(1, 2)
             assertEquals(1, countNodes(tree.rootNode))
+            assertTrue(isAvl(tree.rootNode))
+        }
+
+        @Test
+        fun `Multiple insertions`() {
+            values.forEach{ tree.insert(it, it) }
+            assertEquals(1000, countNodes(tree.rootNode))
             assertTrue(isAvl(tree.rootNode))
         }
     }
