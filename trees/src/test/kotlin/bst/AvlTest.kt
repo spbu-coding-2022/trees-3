@@ -3,6 +3,7 @@ package bst
 import bst.nodes.AVLNode
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import kotlin.math.max
 
@@ -37,6 +38,39 @@ class AvlTreeTest {
         assertNull(tree.rootNode)
         assertEquals(0, countNodes(tree.rootNode))
         assertTrue(isAvl(tree.rootNode))
+    }
+
+    @Nested
+    inner class `Insertion tests` {
+        @Test
+        fun `Single insertion`() {
+            tree.insert(1, 1)
+            assertEquals(1, tree.rootNode?.key)
+            assertEquals(1, countNodes(tree.rootNode))
+            assertTrue(isAvl(tree.rootNode))
+        }
+
+        @Test
+        fun `Bigger insertion`() {
+            tree.insert(2, 2)
+            tree.insert(3, 3)
+            tree.insert(1, 1)
+
+            assertEquals(2, tree.rootNode?.key)
+            assertEquals(3, tree.rootNode?.right?.key)
+            assertEquals(1, tree.rootNode?.left?.key)
+
+            assertEquals(3, countNodes(tree.rootNode))
+            assertTrue(isAvl(tree.rootNode))
+        }
+
+        @Test
+        fun `Same key inserted twice`() {
+            tree.insert(1, 1)
+            tree.insert(1, 2)
+            assertEquals(1, countNodes(tree.rootNode))
+            assertTrue(isAvl(tree.rootNode))
+        }
     }
 }
 
