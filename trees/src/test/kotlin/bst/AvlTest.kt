@@ -136,5 +136,19 @@ class AvlTreeTest {
             assertTrue(isAvl(tree.rootNode))
         }
     }
+    @Nested
+    inner class `Find tests` {
+        @Test
+        fun `Find test`() {
+            values.forEach{ tree.insert(it, it) }
+            values.forEach{ assertEquals(it, tree.find(it)) }
+        }
+
+        @Test
+        fun `Find by non-existing key`() {
+            values.forEach{ tree.insert(it, it) }
+            assertNull(tree.find(-1))
+        }
+    }
 }
 
