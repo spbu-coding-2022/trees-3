@@ -136,6 +136,7 @@ class AvlTreeTest {
             assertTrue(isAvl(tree.rootNode))
         }
     }
+
     @Nested
     inner class `Find tests` {
         @Test
@@ -149,6 +150,35 @@ class AvlTreeTest {
             values.forEach{ tree.insert(it, it) }
             assertNull(tree.find(-1))
         }
+    }
+
+    @Nested
+    inner class `Deletion tests` {
+        @Test
+        fun `Single deletion`() {
+            tree.insert(1, 1)
+            tree.remove(1)
+            assertEquals(0, countNodes(tree.rootNode))
+            assertTrue(isAvl(tree.rootNode))
+        }
+
+        @Test
+        fun `Non-existent key deletion`() {
+            tree.insert(3, 3)
+            tree.insert(4, 4)
+            tree.insert(1, 1)
+            tree.remove(-1)
+        }
+
+        @Test
+        fun `Multiple deletions`() {
+            values.forEach{ tree.insert(it, it) }
+            values.take(500).forEach{ tree.remove(it) }
+            assertEquals(500, countNodes(tree.rootNode))
+            assertTrue(isAvl(tree.rootNode))
+        }
+
+        //TODO: Add tests on deletions that cause rotations
     }
 }
 
