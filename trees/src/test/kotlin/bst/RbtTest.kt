@@ -75,11 +75,11 @@ class RbtTest {
 
     @Test
     fun `Check invariants after each action`() {
-        values.take(1000).forEach{
+        values.take(1000).forEach {
             tree.insert(it, it.toString())
             assertNotEquals(0, isRbt(tree.rootNode))
         }
-        values.take(500).forEach{
+        values.take(500).forEach {
             tree.remove(it)
             assertNotEquals(0, isRbt(tree.rootNode))
         }
