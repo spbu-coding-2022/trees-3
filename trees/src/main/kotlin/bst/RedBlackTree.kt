@@ -4,7 +4,7 @@ import bst.nodes.RBTNode
 
 class RedBlackTree<K : Comparable<K>, V> : BalancingTree<K, V, RBTNode<K, V>>() {
     private fun isRed(node: RBTNode<K, V>?): Boolean {
-        return node?.red == true
+        return node != null && node.red
     }
 
     override fun insert(key: K, value: V) {
@@ -14,10 +14,11 @@ class RedBlackTree<K : Comparable<K>, V> : BalancingTree<K, V, RBTNode<K, V>>() 
     private fun insertNode(key: K, value: V) {
         if (rootNode == null) {
             /* Empty tree case */
-            rootNode = RBTNode(key, value, false)
+            rootNode = initNode(key, value)
+            rootNode!!.red = false
             return
         } else {
-            val head = RBTNode(key, value) // False tree root
+            val head = initNode(key, value) // False tree root
 
             var grandparent: RBTNode<K, V>? = null // Grandparent
             var t: RBTNode<K, V> = head // Parent
@@ -32,7 +33,7 @@ class RedBlackTree<K : Comparable<K>, V> : BalancingTree<K, V, RBTNode<K, V>>() 
             while (true) {
                 if (q == null) {
                     // Insert new node at the bottom
-                    q = RBTNode(key, value)
+                    q = initNode(key, value)
                     if (dir) parent?.right = q else parent?.left = q
                 } else if (isRed(q.left) && isRed(q.right)) {
                     // Color flip
@@ -90,14 +91,12 @@ class RedBlackTree<K : Comparable<K>, V> : BalancingTree<K, V, RBTNode<K, V>>() 
     }
     private fun removeNode(key: K): Int {
         if (rootNode != null) {
-            val head = RBTNode(key, "" as V) // False tree root
+            val head = initNode(key, "" as V) // False tree root
             var q: RBTNode<K, V>? = head
             var parent: RBTNode<K, V>? = null
             var grandparent: RBTNode<K, V>?  // Helpers
-            var f: RBTNode<K, V>? = null /* Found item */
+            var f: RBTNode<K, V>? = null /* Found item's parent */
             var dir = true
-
-            var del: Boolean = true
 
             q?.right = rootNode
 
@@ -119,8 +118,7 @@ class RedBlackTree<K : Comparable<K>, V> : BalancingTree<K, V, RBTNode<K, V>>() 
                   going; we'll do removal tasks at the end
                 */
                 if (q.key == key) {
-                    f = parent
-                    del = last
+                    f = q
                 }
                 /* Push the red node down with rotations and color flips */
                 if (!isRed(q) && !isRed(q.child(dir))) {
@@ -168,12 +166,8 @@ class RedBlackTree<K : Comparable<K>, V> : BalancingTree<K, V, RBTNode<K, V>>() 
 
             /* Replace and remove the saved node */
             if (f != null) {
-                if (del) {
-                    f.right = q
-                }
-                else {
-                    f.left = q
-                }
+                f.key = q.key
+                f.value = q.value
                 if (parent!!.right == q) {
                     parent.right = q.child(q.left == null)
                 }
@@ -213,7 +207,5 @@ class RedBlackTree<K : Comparable<K>, V> : BalancingTree<K, V, RBTNode<K, V>>() 
         return rotate(node, dir)
     }
 
-    override fun initNode(key: K, value: V): RBTNode<K, V> {
-        TODO("Not yet implemented")
-    }
+    override fun initNode(key: K, value: V): RBTNode<K, V> = RBTNode(key, value)
 }
