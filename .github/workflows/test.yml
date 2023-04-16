@@ -1,0 +1,43 @@
+name: test with coverage
+on:
+  push:
+  pull_request:
+jobs:
+  build:
+    name: Build and Run Tests
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Setup Gradle
+        uses: gradle/gradle-build-action@v2
+      - name: Build with Gradle
+        run: ./gradlew build
+      - name: Cache Gradle packages
+        uses: actions/cache@v3
+        with:
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
+          restore-keys: |
+            ${{ runner.os }}-gradle
+      - name: Run test
+        run: |
+          ./gradlew test
+      - name: JaCoCo Coverage Report
+        env:
+          report_path: trees/build/jacoco/report.csv
+        run: |
+          awk -F"," '{ instructions += $4 + $5; covered += $5; branches += $6 + $7; branches_covered +=$7 } END { print "Instructions covered:", covered"/"instructions, "--", 100*covered/instructions"%"; print "Branches covered:", branches_covered"/"branches, "--", 100*branches_covered/branches"%" }' $report_path
+      - uses: actions/upload-artifact@v3
+        with:
+          name: test-and-coverage-reports
+          path: trees/build/reports
+          retention-days: 365
+      - name: Cleanup Gradle Cache
+
+        # Remove some files from the Gradle cache, so they aren't cached by GitHub Actions.
+        # Restoring these files from a GitHub Actions cache might cause problems for future builds.
+        run: |
+          rm -f ~/.gradle/caches/modules-2/modules-2.lock
+          rm -f ~/.gradle/caches/modules-2/gc.properties
