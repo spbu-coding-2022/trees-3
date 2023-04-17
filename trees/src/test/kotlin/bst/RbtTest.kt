@@ -92,7 +92,7 @@ class RbtTest {
         @Test
         fun `Single insertion`() {
             tree.insert(1, "A")
-            assertEquals(1, tree.rootNode!!.key)
+            assertEquals(1, tree.rootNode?.key)
             assertEquals(1, countNodes(tree.rootNode))
             assertNotEquals(0, isRbt(tree.rootNode))
         }
@@ -103,8 +103,8 @@ class RbtTest {
             tree.insert(5, "E")
             tree.insert(1, "A")
             tree.insert(18, "R")
-            assertEquals("E", tree.find(tree.rootNode!!.key))
-            assertEquals("A", tree.find(tree.rootNode!!.left!!.key))
+            assertEquals("E", tree.rootNode?.let { tree.find(it.key) })
+            assertEquals("A", tree.rootNode?.left?.let { tree.find(it.key) })
             assertEquals(null, tree.find(10))
 
             assertEquals(4, countNodes(tree.rootNode))
