@@ -2,6 +2,7 @@ plugins {
     // Apply the org.jetbrains.kotlin.jvm Plugin to add support for Kotlin.
     id("org.jetbrains.kotlin.jvm") version "1.8.10"
     id("jacoco")
+    id("org.jetbrains.kotlin.plugin.noarg") version "1.8.20"
 }
 
 repositories {
@@ -15,6 +16,10 @@ dependencies {
 
     // Use the JUnit 5 integration.
     testImplementation("org.junit.jupiter:junit-jupiter-engine:5.9.2")
+
+    implementation("org.neo4j:neo4j-ogm-core:4.0.5")
+    runtimeOnly("org.neo4j:neo4j-ogm-bolt-driver:4.0.5")
+
 }
 
 tasks.test {
@@ -32,4 +37,9 @@ tasks.jacocoTestReport {
         csv.required.set(true)
         csv.outputLocation.set(layout.buildDirectory.file("jacoco/report.csv"))
     }
+}
+
+noArg {
+    annotation("org.neo4j.ogm.annotation.NodeEntity")
+    annotation("org.neo4j.ogm.annotation.RelationshipEntity")
 }
