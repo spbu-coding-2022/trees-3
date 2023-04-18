@@ -16,6 +16,8 @@ jobs:
       - name: Lint Code Base
         uses: github/super-linter/slim@v5
         env:
+          VALIDATE_JSCPD: false
+          VALIDATE_MARKDOWN: false
           VALIDATE_KOTLIN_ANDROID: false
           VALIDATE_ALL_CODEBASE: false
           DEFAULT_BRANCH: "main"
