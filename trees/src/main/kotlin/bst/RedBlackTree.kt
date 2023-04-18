@@ -43,21 +43,18 @@ class RedBlackTree<K : Comparable<K>, V> : BalancingTree<K, V, RBTNode<K, V>>() 
                 }
                 // Fix red violation
                 if (isRed(q) && isRed(parent) && grandparent != null) {
-                    val dir2 = t.child(true) == grandparent// === or == hmmm
+                    val dir2 = t.child(true) == grandparent
                     if (dir2) {
                         if (q == parent?.child(last)) {
                             t.right = rotate(grandparent, !last)
                         } else {
                             t.right = doubleRotate(grandparent, !last)
-
                         }
-                    }
-                    else {
+                    } else {
                         if (q == parent?.child(last)) {
                             t.left = rotate(grandparent, !last)
                         } else {
                             t.left = doubleRotate(grandparent, !last)
-
                         }
                     }
                 }
@@ -91,7 +88,7 @@ class RedBlackTree<K : Comparable<K>, V> : BalancingTree<K, V, RBTNode<K, V>>() 
             val head = initNode(key, "" as V) // False tree root
             var q: RBTNode<K, V> = head
             var parent: RBTNode<K, V>? = null
-            var grandparent: RBTNode<K, V>?  // Helpers
+            var grandparent: RBTNode<K, V>?
             var f: RBTNode<K, V>? = null /* Found item's parent */
             var dir = true
 
@@ -136,8 +133,7 @@ class RedBlackTree<K : Comparable<K>, V> : BalancingTree<K, V, RBTNode<K, V>>() 
                                 s.red = true
                                 q.red = true
                             } else {
-                                val dir2 = (grandparent?.right ?:
-                                throw IllegalStateException("Grandparent node cannot be null")) == parent
+                                val dir2 = (grandparent?.right ?: throw IllegalStateException("Grandparent node cannot be null")) == parent
 
                                 if (isRed(s.child(last))) {
                                     if (dir2) {
@@ -145,12 +141,13 @@ class RedBlackTree<K : Comparable<K>, V> : BalancingTree<K, V, RBTNode<K, V>>() 
                                     } else {
                                         grandparent.left = doubleRotate(parent, last)
                                     }
-                                } else if (isRed(s.child(!last)))
+                                } else if (isRed(s.child(!last))) {
                                     if (dir2) {
                                         grandparent.right = rotate(parent, last)
                                     } else {
                                         grandparent.left = rotate(parent, last)
                                     }
+                                }
                                 /* Ensure correct coloring */
                                 q.red = true
                                 grandparent.child(dir2)?.red = true
@@ -168,8 +165,7 @@ class RedBlackTree<K : Comparable<K>, V> : BalancingTree<K, V, RBTNode<K, V>>() 
                 f.value = q.value
                 if (parent?.right == q) {
                     parent.right = q.child(q.left == null)
-                }
-                else {
+                } else {
                     parent?.left = q.child(q.left == null)
                 }
             }
@@ -183,7 +179,7 @@ class RedBlackTree<K : Comparable<K>, V> : BalancingTree<K, V, RBTNode<K, V>>() 
         return 1
     }
 
-    private fun rotate(node: RBTNode<K,V>, dir: Boolean): RBTNode<K, V> {
+    private fun rotate(node: RBTNode<K, V>, dir: Boolean): RBTNode<K, V> {
         val save: RBTNode<K, V> = if (dir) {
             rotateRight(node)
         } else {
@@ -194,11 +190,10 @@ class RedBlackTree<K : Comparable<K>, V> : BalancingTree<K, V, RBTNode<K, V>>() 
         return save
     }
 
-    private fun doubleRotate(node: RBTNode<K,V>, dir: Boolean): RBTNode<K, V> {
+    private fun doubleRotate(node: RBTNode<K, V>, dir: Boolean): RBTNode<K, V> {
         if (dir) {
             node.left = node.left?.let { rotate(it, false) }
-        }
-        else {
+        } else {
             node.right = node.right?.let { rotate(it, true) }
         }
         return rotate(node, dir)
