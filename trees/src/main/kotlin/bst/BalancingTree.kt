@@ -10,7 +10,7 @@ abstract class BalancingTree<K : Comparable<K>, V, Self : BinaryNode<K, V, Self>
         return right
     }
     protected open fun rotateRight(node: Self): Self {
-        val left = node.left ?: throw NullPointerException("Node's left child cannot be null")
+        val left = node.left ?: throw IllegalStateException("Node's left child cannot be null")
         node.left = left.right
         left.right = node
         return left
