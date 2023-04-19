@@ -14,7 +14,6 @@ To build the library run
 ```sh
   ./gradlew build
 ```
-
 ## Using BinarySearchTree
 Any `Comparable` data can be stored in trees.
 You can start from create bst by:

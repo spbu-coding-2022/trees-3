@@ -7,12 +7,13 @@ import org.neo4j.ogm.annotation.Labels
 import org.neo4j.ogm.annotation.NodeEntity
 
 @NodeEntity
+
 abstract class AbstractBST<K: Comparable<K>, V, Self: BinaryNode<K, V, Self>> : Tree<K, V> {
     @Id
     @GeneratedValue
     val id: Long? = null
-
     var treeName: String = ""
+
     internal var rootNode: Self? = null
 
     // factory method
