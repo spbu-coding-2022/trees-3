@@ -21,9 +21,6 @@ jobs:
           key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
           restore-keys: |
             ${{ runner.os }}-gradle
-      - name: Run test
-        run: |
-          ./gradlew test
       - name: JaCoCo Coverage Report
         env:
           report_path: trees/build/jacoco/report.csv

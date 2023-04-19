@@ -1,11 +1,12 @@
 package bst
 
 import bst.nodes.RBTNode
-import org.junit.jupiter.api.Assertions.*
+import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.assertNotEquals
+import org.junit.jupiter.api.Assertions.assertNull
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
-
 
 class RbtTest {
     /*
@@ -14,7 +15,7 @@ class RbtTest {
     the tree is invalid red-black tree, and any other number is the black height
     of the entire tree.
      */
-    private fun <K: Comparable<K>, V>isRbt(root: RBTNode<K, V>?): Int {
+    private fun <K : Comparable<K>, V>isRbt(root: RBTNode<K, V>?): Int {
         if (root == null) {
             return 1
         }
@@ -29,11 +30,9 @@ class RbtTest {
         val rightHeight = isRbt(right)
 
         // Invalid binary search tree
-        if ((left != null && left.key >= root.key) ||
-            (right != null && right.key <= root.key)) {
+        if ((left != null && left.key >= root.key) || (right != null && right.key <= root.key)) {
             return 0
         }
-
 
         // Black height mismatch
         if (leftHeight != 0 && rightHeight != 0 && leftHeight != rightHeight) {
@@ -46,7 +45,6 @@ class RbtTest {
         } else {
             0
         }
-
     }
 
     private fun <K : Comparable<K>, V> isRed(node: RBTNode<K, V>?): Boolean {
@@ -84,7 +82,6 @@ class RbtTest {
             assertNotEquals(0, isRbt(tree.rootNode))
         }
         assertEquals(500, countNodes(tree.rootNode))
-
     }
 
     @Nested
@@ -92,7 +89,7 @@ class RbtTest {
         @Test
         fun `Single insertion`() {
             tree.insert(1, "A")
-            assertEquals(1, tree.rootNode!!.key)
+            assertEquals(1, tree.rootNode?.key)
             assertEquals(1, countNodes(tree.rootNode))
             assertNotEquals(0, isRbt(tree.rootNode))
         }
@@ -103,8 +100,8 @@ class RbtTest {
             tree.insert(5, "E")
             tree.insert(1, "A")
             tree.insert(18, "R")
-            assertEquals("E", tree.find(tree.rootNode!!.key))
-            assertEquals("A", tree.find(tree.rootNode!!.left!!.key))
+            assertEquals("E", tree.rootNode?.let { tree.find(it.key) })
+            assertEquals("A", tree.rootNode?.left?.let { tree.find(it.key) })
             assertEquals(null, tree.find(10))
 
             assertEquals(4, countNodes(tree.rootNode))
@@ -119,7 +116,6 @@ class RbtTest {
             assertNotEquals(0, isRbt(tree.rootNode))
             assertEquals("B", tree.find(1))
         }
-
     }
 
     @Nested
@@ -148,7 +144,7 @@ class RbtTest {
             tree.insert(18, "R")
             tree.remove(1)
             tree.remove(19)
-            assertEquals("R", tree. find(18))
+            assertEquals("R", tree.find(18))
             assertEquals(null, tree.find(1))
             tree.remove(18)
             assertEquals("E", tree.find(5))
@@ -159,8 +155,8 @@ class RbtTest {
         @Test
         fun `Many deletions`() {
             values.shuffle()
-            values.forEach{ tree.insert(it, it.toString()) }
-            values.take(500_000).forEach{ tree.remove(it) }
+            values.forEach { tree.insert(it, it.toString()) }
+            values.take(500_000).forEach { tree.remove(it) }
             assertEquals(500_000, countNodes(tree.rootNode))
             assertNotEquals(0, isRbt(tree.rootNode))
         }

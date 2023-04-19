@@ -1,8 +1,10 @@
 package bst
 
-
 import bst.nodes.BSTNode
-import org.junit.jupiter.api.Assertions.*
+import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.assertNotEquals
+import org.junit.jupiter.api.Assertions.assertNull
+import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 
@@ -13,8 +15,7 @@ class BstTest {
         }
         val left = root.left
         val right = root.right
-        if ((left != null && left.key >= root.key) ||
-            (right != null && right.key <= root.key)) {
+        if ((left != null && left.key >= root.key) || (right != null && right.key <= root.key)) {
             return false
         }
         return isBst(left) && isBst(right)
@@ -41,7 +42,7 @@ class BstTest {
 
     @Test
     fun `Check invariants after each action`() {
-        val values = IntArray(1000){ it + 1 }
+        val values = IntArray(1000) { it + 1 }
         values.shuffle()
         values.forEach {
             tree.insert(it, it)

@@ -1,12 +1,12 @@
-//GPL-3.0-or-later
+// GPL-3.0-or-later
 // <Here is a data structure that implements the binary search tree.>
-//This file is part of Trees-3.
+// This file is part of Trees-3.
 //
-//Trees-3 is free software: you can redistribute and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation; either version 3 of the license or (at your option) any later version.
+// Trees-3 is free software: you can redistribute and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation; either version 3 of the license or (at your option) any later version.
 //
-//Trees-3 is distributed in the hope that it will be useful, but WITHOUT ANY GUARANTEES; even without an implicit guarantee of merchantability or FITNESS FOR A PARTICULAR PURPOSE. For more information, see the GNU General Public License.
+// Trees-3 is distributed in the hope that it will be useful, but WITHOUT ANY GUARANTEES; even without an implicit guarantee of merchantability or FITNESS FOR A PARTICULAR PURPOSE. For more information, see the GNU General Public License.
 //
-//You should have obtained a copy of the GNU General Public License with this program. If it is not, see <https://www.gnu.org/licenses/>.
+// You should have obtained a copy of the GNU General Public License with this program. If it is not, see <https://www.gnu.org/licenses/>.
 //    Copyright (C) <2023>  <Nemakin Nikita Antonovich>
 
 package bst
@@ -14,7 +14,7 @@ package bst
 import bst.nodes.AVLNode
 import kotlin.math.max
 
-class AVLTree<K: Comparable<K>, V> : BalancingTree<K, V, AVLNode<K, V>>() {
+class AVLTree<K : Comparable<K>, V> : BalancingTree<K, V, AVLNode<K, V>>() {
     override fun initNode(key: K, value: V): AVLNode<K, V> = AVLNode(key, value)
 
     override fun insertNode(node: AVLNode<K, V>?, key: K, value: V): AVLNode<K, V> {
@@ -45,13 +45,13 @@ class AVLTree<K: Comparable<K>, V> : BalancingTree<K, V, AVLNode<K, V>>() {
         return when (getBalanceFactor(node)) {
             -2 -> {
                 if (getBalanceFactor(node.left) == 1) {
-                    node.left = rotateLeft(node.left!!)
+                    node.left = node.left?.let { rotateLeft(it) }
                 }
                 return rotateRight(node)
             }
             2 -> {
                 if (getBalanceFactor(node.right) == -1) {
-                    node.right = rotateRight(node.right!!)
+                    node.right = node.right?.let { rotateRight(it) }
                 }
                 return rotateLeft(node)
             }

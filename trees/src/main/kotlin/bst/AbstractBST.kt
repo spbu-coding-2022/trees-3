@@ -6,17 +6,16 @@ import org.neo4j.ogm.annotation.Id
 import org.neo4j.ogm.annotation.Labels
 import org.neo4j.ogm.annotation.NodeEntity
 
-
 @NodeEntity
-abstract class AbstractBST<K: Comparable<K>, V, Self: BinaryNode<K, V, Self>> : Tree<K, V> {
+abstract class AbstractBST<K : Comparable<K>, V, Self : BinaryNode<K, V, Self>> : Tree<K, V> {
     @Id
     @GeneratedValue
     val id: Long? = null
 
     lateinit var treeName: String
-
-
+    
     internal var rootNode: Self? = null
+
     // factory method
     protected abstract fun initNode(key: K, value: V): Self
 
@@ -67,10 +66,11 @@ abstract class AbstractBST<K: Comparable<K>, V, Self: BinaryNode<K, V, Self>> : 
         } else if (key == node.key) {
             node.value
         } else {
-            if (key < node.key)
+            if (key < node.key) {
                 findNode(node.left, key)
-            else
+            } else {
                 findNode(node.right, key)
+            }
         }
     }
 
@@ -79,6 +79,8 @@ abstract class AbstractBST<K: Comparable<K>, V, Self: BinaryNode<K, V, Self>> : 
         node.right == null -> node
         else -> findMax(node.right)
     }
+
+    /*
 
     // for debug purposes only
     fun printTree() = println(diagram(rootNode))
@@ -95,5 +97,7 @@ abstract class AbstractBST<K: Comparable<K>, V, Self: BinaryNode<K, V, Self>> : 
             }
         } ?: "${root}null\n"
     }
+
+     */
 }
 

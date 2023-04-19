@@ -6,7 +6,7 @@ import org.neo4j.ogm.annotation.PostLoad
 import org.neo4j.ogm.annotation.Property
 
 @NodeEntity
-abstract class BinaryNode<K: Comparable<K>, V, Self: BinaryNode<K, V, Self>>(
+abstract class BinaryNode<K : Comparable<K>, V, Self : BinaryNode<K, V, Self>>(
     var key: K,
     var value: V
 ) {
