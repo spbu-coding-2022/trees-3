@@ -15,13 +15,13 @@ class Neo4j(config: Configuration) {
     }
 
     fun removeTree(name: String) {
-        session.query("MATCH (n:${name})-[r *0..]->(m) DETACH DELETE m", mapOf<String, String>())
+        session.query("MATCH (n)-[r *0..]->(m) WHERE n.property = ${name} DETACH DELETE m", mapOf<String, String>())
             ?: throw NoSuchElementException("No tree with that name has been found")
     }
 
     fun getTree(name: String) = session.queryForObject(
-            AbstractBST::class.java, "MATCH (n:${name})-[r *1..]-(m) " +
-            "RETURN n, r, m", mapOf("name" to name)) ?: throw NoSuchElementException("No tree with that name has been found")
+            AbstractBST::class.java, "MATCH (n)-[r *1..]-(m) " +
+            "WHERE n.property = ${name} RETURN n, r, m", mapOf("name" to name)) ?: throw NoSuchElementException("No tree with that name has been found")
 
     fun getNames() = session.query("MATCH (n: AbstractBST) return n", mapOf<String, String>())
 

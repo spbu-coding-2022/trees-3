@@ -16,8 +16,7 @@ abstract class AbstractBST<K: Comparable<K>, V, Self: BinaryNode<K, V, Self>> : 
     @GeneratedValue
     val id: Long? = null
 
-    @Labels
-    val labels = mutableListOf<String>()
+    lateinit var treeName: String
 
 
 >>>>>>> 2dd00ac (db: initial commit for neo4j)
