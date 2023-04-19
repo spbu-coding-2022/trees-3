@@ -12,7 +12,7 @@ import org.neo4j.ogm.session.SessionFactory
 import org.neo4j.ogm.session.query
 
 
-class BSTree<K: Comparable<K>, V>(@Transient val key: K? = null, @Transient val value: V? = null, treeName_: String): AbstractBST<K, V, BSTNode<K, V>>() {
+class BSTree<K: Comparable<K>, V>(@Transient val key: K? = null, @Transient val value: V? = null, treeName_: String=""): AbstractBST<K, V, BSTNode<K, V>>() {
     override fun initNode(key: K, value: V): BSTNode<K, V> = BSTNode(key, value)
     init {
         if (key != null && value != null) {
