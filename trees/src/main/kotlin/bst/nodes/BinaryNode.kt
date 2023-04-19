@@ -15,6 +15,8 @@ abstract class BinaryNode<K : Comparable<K>, V, Self : BinaryNode<K, V, Self>>(
     var id: Long? = null
     var left: Self? = null
     var right: Self? = null
+    var x: Double = 0.0
+    var y: Double = 0.0
 
     @Property(name = "key")
     private val clavis = key as Any

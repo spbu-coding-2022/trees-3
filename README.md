@@ -14,26 +14,49 @@ To build the library run
 ```sh
   ./gradlew build
 ```
-
-## Using BSTs
+## Using BinarySearchTree
 Any `Comparable` data can be stored in trees.
+You can start from create bst by:
+
 ```kotlin
-import bst.AVLTree
-import bst.RedBlackTree
-import bst.BSTree
-val rbTree = RedBlackTree<Int, String>() // instantiate empty red-black tree
-val avlTree = AVLTree<Double, String>() // instantiate empty AVL tree
-val simpleTree = BSTree<String, String>() // instantiate empty simple tree
+    import bst.BSTree
+    val test_data = BSTree("121", "dgs", "tree_1")
+    //also we support add and remove elements from bst. You can do this by:
+    test_data.insert("110", "dafad")
+    test_data.insert("118", "adfaf")
+    test_data.insert("124", "fggsg")
 ```
 
-Each tree supports 3 basic operations: `insert`, `find`, `remove`.
-```kotlin
-rbTree.insert(10, "E")
-rbTree.insert(20, "B")
-rbTree.find(10) // returns "E"
-rbTree.find(500) // returns null
-rbTree.remove(20)  
-rbTree.remove(-100)
+find or remove element from tree:
+```kotlin    
+    test_data.remove("124")
+    test_data.find("118")
 ```
+Same operations support RBT and AVL trees.
+
+
+BinarySearchTree supports save tree object to json file, and up tree from json.
+For example:
+```kotlin
+    test_data.saveTreeToJson()
+    readFromJson("tree_1.json")
+```
+
+In development saving nodes to databases: neo4j and sql.
+
+To save BST in SQL database we propose you to use models in directory main/db.
+for example:
+```kotlin
+        val treeObj = Tree.new {
+            name = "Tree_1"
+        }
+        val rootNode = Node.new {
+                key = "test"
+                value = "234"
+                tree = treeObj
+            }
+        treeObj.rootNode = rootNode
+```
+
 ## Storing BSTs 
 `bst` provides 
