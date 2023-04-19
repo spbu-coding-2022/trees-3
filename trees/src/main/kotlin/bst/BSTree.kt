@@ -2,17 +2,30 @@ package bst
 
 import bst.nodes.BSTNode
 <<<<<<< HEAD
+<<<<<<< HEAD
 import com.google.gson.Gson
 import java.io.FileReader
 import java.io.FileWriter
 =======
+=======
+
+>>>>>>> 001bf13 (Add x, y coordinates to nodes)
 import org.neo4j.ogm.annotation.Labels
 import org.neo4j.ogm.config.Configuration
 import org.neo4j.ogm.session.SessionFactory
 import org.neo4j.ogm.session.query
 >>>>>>> 2dd00ac (db: initial commit for neo4j)
 
+<<<<<<< HEAD
 class BSTree<K: Comparable<K>, V>(@Transient val key: K? = null, @Transient val value: V? = null, val treeName:String = ""): AbstractBST<K, V, BSTNode<K, V>>() {
+=======
+import com.google.gson.Gson
+import java.io.FileReader
+import java.io.FileWriter
+
+
+class BSTree<K: Comparable<K>, V>(@Transient val key: K? = null, @Transient val value: V? = null): AbstractBST<K, V, BSTNode<K, V>>() {
+>>>>>>> 001bf13 (Add x, y coordinates to nodes)
     override fun initNode(key: K, value: V): BSTNode<K, V> = BSTNode(key, value)
 
     init {
@@ -50,7 +63,11 @@ class BSTree<K: Comparable<K>, V>(@Transient val key: K? = null, @Transient val 
 
 
 fun main(){
+<<<<<<< HEAD
     val test_data = BSTree("121", "dgs", "tree_1")
+=======
+    val test_data = BSTree("121", "dgs")
+>>>>>>> 001bf13 (Add x, y coordinates to nodes)
     test_data.insert("110", "dafad")
     test_data.insert("118", "adfaf")
     test_data.insert("124", "fggsg")
