@@ -6,20 +6,13 @@ import org.neo4j.ogm.annotation.Id
 import org.neo4j.ogm.annotation.Labels
 import org.neo4j.ogm.annotation.NodeEntity
 
-<<<<<<< HEAD
-abstract class AbstractBST<K : Comparable<K>, V, Self : BinaryNode<K, V, Self>> : Tree<K, V> {
-=======
-
 @NodeEntity
 abstract class AbstractBST<K: Comparable<K>, V, Self: BinaryNode<K, V, Self>> : Tree<K, V> {
     @Id
     @GeneratedValue
     val id: Long? = null
 
-    lateinit var treeName: String
-
-
->>>>>>> 2dd00ac (db: initial commit for neo4j)
+    var treeName: String = ""
     internal var rootNode: Self? = null
 
     // factory method
