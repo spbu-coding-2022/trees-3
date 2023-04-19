@@ -1,8 +1,19 @@
 package bst
 
 import bst.nodes.BinaryNode
+import org.neo4j.ogm.annotation.GeneratedValue
+import org.neo4j.ogm.annotation.Id
+import org.neo4j.ogm.annotation.Labels
+import org.neo4j.ogm.annotation.NodeEntity
 
+@NodeEntity
 abstract class AbstractBST<K : Comparable<K>, V, Self : BinaryNode<K, V, Self>> : Tree<K, V> {
+    @Id
+    @GeneratedValue
+    val id: Long? = null
+
+    lateinit var treeName: String
+
     internal var rootNode: Self? = null
 
     // factory method
@@ -22,6 +33,7 @@ abstract class AbstractBST<K : Comparable<K>, V, Self : BinaryNode<K, V, Self>> 
         }
         return node
     }
+
 
     override fun remove(key: K) {
         rootNode = removeNode(rootNode, key)
@@ -88,3 +100,4 @@ abstract class AbstractBST<K : Comparable<K>, V, Self : BinaryNode<K, V, Self>> 
 
      */
 }
+
