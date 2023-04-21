@@ -10,8 +10,6 @@ repositories {
     mavenCentral()
 }
 
-val exposedVersion: String by project
-val sqliteJdbcVersion: String by project
 dependencies {
     // Use the Kotlin JUnit 5 integration.
     testImplementation("org.jetbrains.kotlin:kotlin-test-junit5")
@@ -27,14 +25,14 @@ dependencies {
     implementation("com.google.code.gson:gson:2.10.1")
 
     // Use JetBrains Exposed
-    implementation("org.jetbrains.exposed:exposed-core:$exposedVersion")
-    implementation("org.jetbrains.exposed:exposed-dao:$exposedVersion")
-    implementation("org.jetbrains.exposed:exposed-jdbc:$exposedVersion")
+    implementation("org.jetbrains.exposed:exposed-core:0.40.1")
+    implementation("org.jetbrains.exposed:exposed-dao:0.40.1")
+    implementation("org.jetbrains.exposed:exposed-jdbc:0.40.1")
 
-    implementation("org.xerial", "sqlite-jdbc", sqliteJdbcVersion)
+    implementation("org.xerial:sqlite-jdbc:3.41.2.1")
 
-    implementation("io.github.microutils", "kotlin-logging-jvm", "2.0.6")
-    implementation("org.slf4j", "slf4j-simple", "1.7.29")
+    implementation("io.github.microutils:kotlin-logging-jvm:2.0.6")
+    implementation("org.slf4j:slf4j-simple:1.7.29")
 
 }
 
