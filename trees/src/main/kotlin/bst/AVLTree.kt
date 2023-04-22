@@ -1,14 +1,3 @@
-// GPL-3.0-or-later
-// <Here is a data structure that implements the binary search tree.>
-// This file is part of Trees-3.
-//
-// Trees-3 is free software: you can redistribute and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation; either version 3 of the license or (at your option) any later version.
-//
-// Trees-3 is distributed in the hope that it will be useful, but WITHOUT ANY GUARANTEES; even without an implicit guarantee of merchantability or FITNESS FOR A PARTICULAR PURPOSE. For more information, see the GNU General Public License.
-//
-// You should have obtained a copy of the GNU General Public License with this program. If it is not, see <https://www.gnu.org/licenses/>.
-//    Copyright (C) <2023>  <Nemakin Nikita Antonovich>
-
 package bst
 
 import bst.nodes.AVLNode
@@ -71,7 +60,8 @@ class AVLTree<K : Comparable<K>, V> : BalancingTree<K, V, AVLNode<K, V>>() {
             } else if (node.right == null) {
                 return node.left
             } else {
-                val tmp: AVLNode<K, V> = findMax(node.left)!!
+                val tmp: AVLNode<K, V> = findMax(node.left) ?:
+                    throw IllegalStateException("Left subtree must contain elements")
                 node.key = tmp.key
                 node.value = tmp.value
                 node.left = removeNode(node.left, tmp.key)
@@ -83,15 +73,19 @@ class AVLTree<K : Comparable<K>, V> : BalancingTree<K, V, AVLNode<K, V>>() {
     }
 
     override fun rotateRight(node: AVLNode<K, V>): AVLNode<K, V> {
-        val tmp = super.rotateRight(node)
+        val left = node.left ?: throw IllegalStateException("Node's left child cannot be null")
+        node.left = left.right
+        left.right = node
         updateHeight(node)
-        updateHeight(tmp)
-        return tmp
+        updateHeight(left)
+        return left
     }
     override fun rotateLeft(node: AVLNode<K, V>): AVLNode<K, V> {
-        val tmp = super.rotateLeft(node)
+        val right = node.right ?: throw IllegalStateException("Node's right child cannot be null")
+        node.right = right.left
+        right.left = node
         updateHeight(node)
-        updateHeight(tmp)
-        return tmp
+        updateHeight(right)
+        return right
     }
 }

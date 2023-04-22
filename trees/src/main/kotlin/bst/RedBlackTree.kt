@@ -200,4 +200,18 @@ class RedBlackTree<K : Comparable<K>, V> : BalancingTree<K, V, RBTNode<K, V>>() 
     }
 
     override fun initNode(key: K, value: V): RBTNode<K, V> = RBTNode(key, value)
+
+    override fun rotateLeft(node: RBTNode<K, V>): RBTNode<K, V> {
+        val right = node.right ?: throw IllegalStateException("Node's right child cannot be null")
+        node.right = right.left
+        right.left = node
+        return right
+    }
+
+    override fun rotateRight(node: RBTNode<K, V>): RBTNode<K, V> {
+        val left = node.left ?: throw IllegalStateException("Node's left child cannot be null")
+        node.left = left.right
+        left.right = node
+        return left
+    }
 }
