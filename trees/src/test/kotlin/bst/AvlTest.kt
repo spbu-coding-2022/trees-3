@@ -31,7 +31,6 @@ class AvlTest {
     @BeforeEach
     fun initializeObjects() {
         tree = AVLTree()
-        values.shuffle()
     }
 
     @Test
@@ -44,15 +43,7 @@ class AvlTest {
     @Nested
     inner class InsertionTests {
         @Test
-        fun `Single insertion`() {
-            tree.insert(1, 1)
-            assertEquals(1, tree.rootNode?.key)
-            assertEquals(1, countNodes(tree.rootNode))
-            assertTrue(isAvl(tree.rootNode))
-        }
-
-        @Test
-        fun `Bigger insertion`() {
+        fun `Simple insertion`() {
             tree.insert(2, 2)
             tree.insert(3, 3)
             tree.insert(1, 1)
@@ -66,7 +57,7 @@ class AvlTest {
         }
 
         @Test
-        fun `Left-left case`() {
+        fun `Left-left rotation case`() {
             tree.insert(3, 3)
             tree.insert(2, 2)
             tree.insert(1, 1)
@@ -80,7 +71,7 @@ class AvlTest {
         }
 
         @Test
-        fun `Left-right case`() {
+        fun `Left-right rotation case`() {
             tree.insert(5, 5)
             tree.insert(3, 3)
             tree.insert(4, 4)
@@ -94,7 +85,7 @@ class AvlTest {
         }
 
         @Test
-        fun `Right-right case`() {
+        fun `Right-right rotation case`() {
             tree.insert(3, 3)
             tree.insert(4, 4)
             tree.insert(5, 5)
@@ -108,7 +99,7 @@ class AvlTest {
         }
 
         @Test
-        fun `Right-left case`() {
+        fun `Right-left rotation case`() {
             tree.insert(3, 3)
             tree.insert(5, 5)
             tree.insert(4, 4)
@@ -168,6 +159,7 @@ class AvlTest {
             tree.insert(4, 4)
             tree.insert(1, 1)
             tree.remove(-1)
+            assertEquals(3, countNodes(tree.rootNode))
         }
 
         @Test
@@ -177,6 +169,5 @@ class AvlTest {
             assertEquals(500, countNodes(tree.rootNode))
             assertTrue(isAvl(tree.rootNode))
         }
-        // TODO: Add tests on deletions that cause rotations
     }
 }

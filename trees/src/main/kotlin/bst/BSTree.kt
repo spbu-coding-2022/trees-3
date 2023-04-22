@@ -1,8 +1,4 @@
 package bst
-import org.neo4j.ogm.annotation.Labels
-import org.neo4j.ogm.config.Configuration
-import org.neo4j.ogm.session.SessionFactory
-import org.neo4j.ogm.session.query
 import bst.nodes.BSTNode
 
 import com.google.gson.Gson
