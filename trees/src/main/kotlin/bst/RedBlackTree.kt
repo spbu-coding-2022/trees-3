@@ -4,7 +4,7 @@ import bst.nodes.RBTNode
 
 class RedBlackTree<K : Comparable<K>, V> : BalancingTree<K, V, RBTNode<K, V>>() {
     private fun isRed(node: RBTNode<K, V>?): Boolean {
-        return node != null && node.red
+        return node != null && node.color == RBTNode.Color.RED
     }
 
     override fun insert(key: K, value: V) {
@@ -15,17 +15,17 @@ class RedBlackTree<K : Comparable<K>, V> : BalancingTree<K, V, RBTNode<K, V>>() 
         if (rootNode == null) {
             /* Empty tree case */
             rootNode = initNode(key, value)
-            rootNode?.red = false
+            rootNode?.color = RBTNode.Color.BLACK
             return
         } else {
             val head = initNode(key, value) // False tree root
 
-            var grandparent: RBTNode<K, V>? = null // Grandparent
-            var t: RBTNode<K, V> = head // Parent
-            var parent: RBTNode<K, V>? = null // Iterator
+            var grandparent: RBTNode<K, V>? = null
+            var t: RBTNode<K, V> = head // Iterator
+            var parent: RBTNode<K, V>? = null
 
             t.right = rootNode
-            var q: RBTNode<K, V>? = t.right // Parent
+            var q: RBTNode<K, V>? = t.right
             var dir = false // false - left, true - right
             var last = false
 
@@ -37,9 +37,9 @@ class RedBlackTree<K : Comparable<K>, V> : BalancingTree<K, V, RBTNode<K, V>>() 
                     if (dir) parent?.right = q else parent?.left = q
                 } else if (isRed(q.left) && isRed(q.right)) {
                     // Color flip
-                    q.red = true
-                    q.left?.red = false
-                    q.right?.red = false
+                    q.color = RBTNode.Color.RED
+                    q.left?.color = RBTNode.Color.BLACK
+                    q.right?.color = RBTNode.Color.BLACK
                 }
                 // Fix red violation
                 if (isRed(q) && isRed(parent) && grandparent != null) {
@@ -78,7 +78,7 @@ class RedBlackTree<K : Comparable<K>, V> : BalancingTree<K, V, RBTNode<K, V>>() 
             // Update root
             rootNode = head.right
         }
-        rootNode?.red = false
+        rootNode?.color = RBTNode.Color.BLACK
     }
     override fun remove(key: K) {
         removeNode(key)
@@ -129,9 +129,9 @@ class RedBlackTree<K : Comparable<K>, V> : BalancingTree<K, V, RBTNode<K, V>>() 
                         if (s != null) {
                             if (!isRed(s.child(!last)) && !isRed(s.child(last))) {
                                 /* Color flip */
-                                parent.red = false
-                                s.red = true
-                                q.red = true
+                                parent.color = RBTNode.Color.BLACK
+                                s.color = RBTNode.Color.RED
+                                q.color = RBTNode.Color.RED
                             } else {
                                 val dir2 = (grandparent?.right ?: throw IllegalStateException("Grandparent node cannot be null")) == parent
 
@@ -149,10 +149,10 @@ class RedBlackTree<K : Comparable<K>, V> : BalancingTree<K, V, RBTNode<K, V>>() 
                                     }
                                 }
                                 /* Ensure correct coloring */
-                                q.red = true
-                                grandparent.child(dir2)?.red = true
-                                grandparent.child(dir2)?.left?.red = false
-                                grandparent.child(dir2)?.right?.red = false
+                                q.color = RBTNode.Color.RED
+                                grandparent.child(dir2)?.color = RBTNode.Color.RED
+                                grandparent.child(dir2)?.left?.color = RBTNode.Color.BLACK
+                                grandparent.child(dir2)?.right?.color = RBTNode.Color.BLACK
                             }
                         }
                     }
@@ -174,7 +174,7 @@ class RedBlackTree<K : Comparable<K>, V> : BalancingTree<K, V, RBTNode<K, V>>() 
             rootNode = head.child(true)
 
             /* Make the root black for simplified logic */
-            rootNode?.red = false
+            rootNode?.color = RBTNode.Color.BLACK
         }
         return 1
     }
@@ -185,8 +185,8 @@ class RedBlackTree<K : Comparable<K>, V> : BalancingTree<K, V, RBTNode<K, V>>() 
         } else {
             rotateLeft(node)
         }
-        node.red = true
-        save.red = false
+        node.color = RBTNode.Color.RED
+        save.color = RBTNode.Color.BLACK
         return save
     }
 

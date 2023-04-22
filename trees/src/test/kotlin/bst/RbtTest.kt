@@ -48,7 +48,7 @@ class RbtTest {
     }
 
     private fun <K : Comparable<K>, V> isRed(node: RBTNode<K, V>?): Boolean {
-        return node != null && node.red
+        return node != null && node.color == RBTNode.Color.RED
     }
 
     private fun <K : Comparable<K>, V> countNodes(node: RBTNode<K, V>?): Int {
