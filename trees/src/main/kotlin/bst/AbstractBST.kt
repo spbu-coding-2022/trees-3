@@ -79,25 +79,5 @@ abstract class AbstractBST<K: Comparable<K>, V, Self: BinaryNode<K, V, Self>> : 
         node.right == null -> node
         else -> findMax(node.right)
     }
-
-    /*
-
-    // for debug purposes only
-    fun printTree() = println(diagram(rootNode))
-    private fun diagram(node: Self?,
-                        top: String = "",
-                        root: String = "",
-                        bottom: String = ""): String {
-        return node?.let {
-            if (node.left == null && node.right == null) {
-                "$root${node.value}\n"
-            } else {
-                diagram(node.right, "$top ", "$top┌──", "$top│ ") +
-                        root + "${node.value}\n" + diagram(node.left, "$bottom│ ", "$bottom└──", "$bottom ")
-            }
-        } ?: "${root}null\n"
-    }
-
-     */
 }
 
