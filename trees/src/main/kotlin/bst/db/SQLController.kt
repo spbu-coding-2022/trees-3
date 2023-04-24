@@ -26,11 +26,9 @@ class SQLController {
         }
     }
 
-    private fun serializeTree(tree: BSTree<*, *>): SerializableTree{
-        val serializedTree = SerializableTree(treeName = tree.treeName, rootNode = tree.rootNode?.let { serializeNode(it) })
-        serializedTree.treeName = tree.treeName
-        serializedTree.rootNode = serializeNode(tree.rootNode)
-        return serializedTree
+    private fun serializeTree(tree: BSTree<*, *>): SerializableTree? {
+        return tree.rootNode?.let { serializeNode(it) }
+            ?.let { SerializableTree(treeName = tree.treeName, rootNode = it) }
     }
 
     private fun createTables(){
@@ -39,15 +37,15 @@ class SQLController {
     }
 
 
-    private fun SerializableNode.toNodeEntity(treeEntity: Tree): Node {
+    private fun SerializableNode.toNodeDao(treeDao: Tree): Node {
         return Node.new {
-            key = this@toNodeEntity.key
-            value = this@toNodeEntity.value
-            x = this@toNodeEntity.x
-            y = this@toNodeEntity.y
-            left = this@toNodeEntity.leftNode?.toNodeEntity(treeEntity)
-            right = this@toNodeEntity.rightNode?.toNodeEntity(treeEntity)
-            tree = treeEntity
+            key = this@toNodeDao.key
+            value = this@toNodeDao.value
+            x = this@toNodeDao.x
+            y = this@toNodeDao.y
+            left = this@toNodeDao.leftNode?.toNodeDao(treeDao)
+            right = this@toNodeDao.rightNode?.toNodeDao(treeDao)
+            tree = treeDao
         }
     }
 
@@ -58,20 +56,93 @@ class SQLController {
             addLogger(StdOutSqlLogger)
             createTables()
             val daoTree = Tree.new {
+                if(serializedTree!=null)
                 name = serializedTree.treeName
             }
-            daoTree.rootNode = serializedTree.rootNode?.toNodeEntity(daoTree)
+            daoTree.rootNode = serializedTree?.rootNode?.toNodeDao(daoTree)
         }
     }
-}
 
-//fun main(){
-//    val test_data = BSTree(121, "dgs")
-//    test_data.insert(110, "dafad")
-//    test_data.insert(118, "adfaf")
-//    test_data.insert(124, "fggsg")
-//    test_data.setName("afefadsf")
-//    val controller = SQLController()
-////    val serializedTree = controller.serializeTree(test_data)
-//    controller.saveTreeToDB(test_data)
-//}
+    private fun Node.getSerializedNode(treeDao: Tree): SerializableNode {
+        return SerializableNode(
+            this@getSerializedNode.key,
+            this@getSerializedNode.value,
+            this@getSerializedNode.x,
+            this@getSerializedNode.y,
+            this@getSerializedNode.left?.getSerializedNode(treeDao),
+            this@getSerializedNode.right?.getSerializedNode(treeDao),
+        )
+
+    }
+
+    private fun findTree(treeName: String): SerializableTree?{
+        connectDB()
+        val treeDAO = Tree.find{Trees.name eq treeName}.firstOrNull() ?: return null
+        return treeDAO.rootNode?.getSerializedNode(treeDAO)?.let {
+            SerializableTree(
+                treeName,
+                it
+            )
+        }
+    }
+
+    private fun isNumeric(s: String): Boolean {
+        return try {
+            s.toDouble()
+            true
+        } catch (e: NumberFormatException) {
+            false
+        }
+    }
+
+    private fun deserializeNodeStringKey(node: SerializableNode?): BSTNode<String, String>? {
+        return if (node == null){
+            null
+        } else{
+
+            val deserializableNode = BSTNode(key = node.key, value = node.value)
+            deserializableNode.right = deserializeNodeStringKey(node.rightNode)
+            deserializableNode.left = deserializeNodeStringKey(node.leftNode)
+            deserializableNode
+        }
+    }
+
+    private fun deserializeNodeDoubleKey(node: SerializableNode?): BSTNode<Double, String>? {
+        return if (node == null){
+            null
+        } else{
+            val deserializableNode = BSTNode(key = node.key.toDouble(), value = node.value)
+            deserializableNode.right = deserializeNodeDoubleKey(node.rightNode)
+            deserializableNode.left = deserializeNodeDoubleKey(node.leftNode)
+            deserializableNode
+        }
+    }
+
+    private fun deserializeTree(tree: SerializableTree?): BSTree<*, *>?{
+        if (tree != null) {
+            return if (isNumeric(tree.rootNode.key)){
+                val rootNode = deserializeNodeDoubleKey(tree.rootNode)
+                val deserializedTree = BSTree(rootNode?.key, rootNode?.value)
+                deserializedTree.rootNode = rootNode
+                deserializedTree.setName(tree.treeName)
+                deserializedTree
+            } else{
+                val rootNode = deserializeNodeStringKey(tree.rootNode)
+                val deserializedTree = BSTree(rootNode?.key, rootNode?.value)
+                deserializedTree.rootNode = rootNode
+                deserializedTree.setName(tree.treeName)
+                deserializedTree
+            }
+        }
+    return null
+    }
+
+    fun getTree(treeName: String): BSTree<*, *>? {
+        var undeserializedTree:SerializableTree? = null
+        transaction {
+            undeserializedTree = findTree(treeName)
+
+        }
+        return deserializeTree(undeserializedTree)
+    }
+}
