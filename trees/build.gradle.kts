@@ -38,6 +38,7 @@ dependencies {
 
     implementation("io.github.microutils", "kotlin-logging-jvm", "2.0.6")
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.5.0")
+    implementation("org.postgresql:postgresql:42.5.4")
 
 
 }

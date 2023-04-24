@@ -8,11 +8,22 @@ import db.Nodes
 import db.Tree
 import org.jetbrains.exposed.sql.transactions.transaction
 
+
 private const val dbPath = "exposed_database.db"
 
 class SQLController {
     private fun connectDB() {
-        Database.connect("jdbc:sqlite:$dbPath", driver = "org.sqlite.JDBC")
+        Database.connect("jdbc:postgresql://localhost:5432/test", driver = "org.postgresql.Driver",
+            user = "test", password = "test")
+    }
+
+    private fun deleteTree(treeName: String) {
+        transaction {
+            val treeEntity =
+                Tree.find { (Trees.name eq treeName)}
+                    .firstOrNull()
+            treeEntity?.delete()
+        }
     }
 
     private fun serializeNode(node: BSTNode<*, *>?): SerializableNode?{
@@ -51,6 +62,7 @@ class SQLController {
 
     fun saveTreeToDB(tree: BSTree<*, *>){
         connectDB()
+        deleteTree(tree.treeName)
         val serializedTree = serializeTree(tree)
         transaction {
             addLogger(StdOutSqlLogger)
@@ -138,11 +150,21 @@ class SQLController {
     }
 
     fun getTree(treeName: String): BSTree<*, *>? {
-        var undeserializedTree:SerializableTree? = null
+        var  deserializedTree:SerializableTree? = null
         transaction {
-            undeserializedTree = findTree(treeName)
-
+             deserializedTree = findTree(treeName)
         }
-        return deserializeTree(undeserializedTree)
+        return deserializeTree( deserializedTree)
     }
+}
+fun main(){
+    val test_data = BSTree(121, "dgs")
+    test_data.insert(110, "dafad")
+    test_data.insert(118, "adfaf")
+    test_data.insert(124, "fggsg")
+    test_data.setName("afefadsf")
+    val controller = SQLController()
+//    val serializedTree = controller.serializeTree(test_data)
+    controller.saveTreeToDB(test_data)
+    val remTree = controller.getTree("afefadsf")
 }
