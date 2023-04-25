@@ -3,7 +3,7 @@ plugins {
     id("org.jetbrains.kotlin.jvm") version "1.8.10"
     id("jacoco")
     id("org.jetbrains.kotlin.plugin.noarg") version "1.8.20"
-    id ("org.jetbrains.kotlin.plugin.serialization") version "1.8.10"
+    id("org.jetbrains.kotlin.plugin.serialization") version "1.8.10"
 
 }
 
@@ -19,7 +19,7 @@ dependencies {
     // Use the JUnit 5 integration.
     testImplementation("org.junit.jupiter:junit-jupiter-engine:5.9.2")
 
-    implementation ("io.github.microutils:kotlin-logging-jvm:2.0.11")
+    implementation("io.github.microutils:kotlin-logging-jvm:2.0.11")
 
 
     implementation("org.slf4j", "slf4j-simple", "2.0.0")
