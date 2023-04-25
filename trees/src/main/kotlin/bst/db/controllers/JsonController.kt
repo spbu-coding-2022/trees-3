@@ -1,4 +1,4 @@
-package bst.db
+package bst.db.controllers
 
 import bst.AVLTree
 import com.google.gson.Gson

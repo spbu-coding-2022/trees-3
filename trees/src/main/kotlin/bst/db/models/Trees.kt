@@ -1,6 +1,6 @@
-package db
+package bst.db.models
 
-import db.Nodes
+import bst.db.models.Nodes
 import org.jetbrains.exposed.dao.id.IntIdTable
 
 object Trees : IntIdTable("trees") {

@@ -1,11 +1,13 @@
-package bst.db
+package bst.db.controllers
 import bst.BSTree
+import bst.db.serializeClasses.SerializableNode
+import bst.db.serializeClasses.SerializableTree
 import bst.nodes.BSTNode
-import db.Node
+import bst.db.models.Node
 import org.jetbrains.exposed.sql.*
-import db.Trees
-import db.Nodes
-import db.Tree
+import bst.db.models.Trees
+import bst.db.models.Nodes
+import bst.db.models.Tree
 import org.jetbrains.exposed.sql.transactions.transaction
 
 
@@ -88,7 +90,7 @@ class SQLController {
 
     private fun findTree(treeName: String): SerializableTree?{
         connectDB()
-        val treeDAO = Tree.find{Trees.name eq treeName}.firstOrNull() ?: return null
+        val treeDAO = Tree.find{ Trees.name eq treeName}.firstOrNull() ?: return null
         return treeDAO.rootNode?.getSerializedNode(treeDAO)?.let {
             SerializableTree(
                 treeName,
@@ -132,7 +134,7 @@ class SQLController {
     }
 
     fun getTree(treeName: String): BSTree<Int, String>? {
-        var  deserializedTree:SerializableTree? = null
+        var  deserializedTree: SerializableTree? = null
         transaction {
             deserializedTree = findTree(treeName)
         }

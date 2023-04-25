@@ -1,4 +1,4 @@
-package bst.db
+package bst.db.serializeClasses
 import kotlinx.serialization.*
 
 @Serializable
