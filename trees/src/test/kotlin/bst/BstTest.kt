@@ -34,14 +34,14 @@ class BstTest {
     }
 
     @Test
-    fun `Empty tree`() {
+    fun `validate tree if empty`() {
         assertNull(tree.rootNode)
         assertEquals(0, countNodes(tree.rootNode))
         assertTrue(isBst(tree.rootNode))
     }
 
     @Test
-    fun `Check invariants after each action`() {
+    fun `verify invariants after each action`() {
         val values = IntArray(1000) { it + 1 }
         values.shuffle()
         values.forEach {

@@ -1,4 +1,4 @@
-package bst.db.models
+package bst.db.models.sql
 
 import org.jetbrains.exposed.dao.IntEntity
 import org.jetbrains.exposed.dao.IntEntityClass
@@ -11,4 +11,3 @@ class Tree(id: EntityID<Int>): IntEntity(id){
     override fun toString(): String = "Node(key = $name, rootNode=$rootNode)"
 }
 
-//fun createTree
