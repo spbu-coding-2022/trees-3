@@ -1,9 +1,11 @@
 package bst.db.models.sql
+
 import org.jetbrains.exposed.dao.*
 import org.jetbrains.exposed.dao.id.EntityID
 
-class Node(id: EntityID<Int>): IntEntity(id) {
-    companion object: IntEntityClass<Node>(Nodes)
+class Node(id: EntityID<Int>) : IntEntity(id) {
+    companion object : IntEntityClass<Node>(Nodes)
+
     var key by Nodes.key
     var value by Nodes.value
     var x by Nodes.x

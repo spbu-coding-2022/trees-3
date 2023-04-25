@@ -9,7 +9,6 @@ import bst.nodes.RBTNode
 import bst.nodes.RBTNode.Color
 import org.neo4j.ogm.config.Configuration
 import org.neo4j.ogm.session.SessionFactory
-import java.util.NoSuchElementException
 
 class Neo4jController(config: Configuration) {
     private val sessionFactory = SessionFactory(config, "bst")
@@ -20,8 +19,15 @@ class Neo4jController(config: Configuration) {
         if (this == null) {
             return null
         }
-        return SerializableNode(key.toString(), value.toString(), 0.0, 0.0,
-            color.toString(), left?.toSerializableNode(), right?.toSerializableNode())
+        return SerializableNode(
+            key.toString(),
+            value.toString(),
+            0.0,
+            0.0,
+            color.toString(),
+            left?.toSerializableNode(),
+            right?.toSerializableNode()
+        )
     }
 
     private fun RedBlackTree<*, *>.toSerializableTree(): SerializableTree {
@@ -47,9 +53,7 @@ class Neo4jController(config: Configuration) {
     private fun deserializeNode(node: SerializableNode?): RBTNode<Int, String>? {
         node ?: return null
         val rbtNode = RBTNode(
-            key = node.key.toInt(),
-            value = node.value,
-            color = deserializeMetadata(node.metadata)
+            key = node.key.toInt(), value = node.value, color = deserializeMetadata(node.metadata)
         )
         rbtNode.left = deserializeNode(node.leftNode)
         rbtNode.right = deserializeNode(node.rightNode)
@@ -80,8 +84,8 @@ class Neo4jController(config: Configuration) {
 
     fun removeTree(name: String) {
         session.query(
-            "MATCH (n)-[r *0..]->(m) " +
-                "WHERE n.treeName = \$name DETACH DELETE m", mapOf("name" to name))
+            "MATCH (n)-[r *0..]->(m) " + "WHERE n.treeName = \$name DETACH DELETE m", mapOf("name" to name)
+        )
     }
 
     fun loadDeserialized(name: String): RedBlackTree<Int, String> {
@@ -97,11 +101,12 @@ class Neo4jController(config: Configuration) {
 
     private fun getTree(name: String): TreeEntity {
         return session.queryForObject(
-            TreeEntity::class.java, "MATCH (n)-[r *1..]-(m) " +
-                "WHERE n.treeName = \$name RETURN n, r, m", mapOf("name" to name)) ?:
-        throw NoSuchElementException("No tree with that name has been found")
+            TreeEntity::class.java,
+            "MATCH (n)-[r *1..]-(m) " + "WHERE n.treeName = \$name RETURN n, r, m",
+            mapOf("name" to name)
+        ) ?: throw NoSuchElementException("No tree with that name has been found")
     }
 
-    fun getNames() = session.query("MATCH (n: TreeEntity) RETURN n.treeName", mapOf<String, String>()).
-    flatMap { it.values.map { value -> value.toString() } }
+    fun getNames() = session.query("MATCH (n: TreeEntity) RETURN n.treeName", mapOf<String, String>())
+        .flatMap { it.values.map { value -> value.toString() } }
 }

@@ -1,4 +1,5 @@
 package bst.db.models.sql
+
 import org.jetbrains.exposed.dao.id.IntIdTable
 import org.jetbrains.exposed.sql.ReferenceOption
 

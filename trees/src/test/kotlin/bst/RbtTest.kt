@@ -15,7 +15,7 @@ class RbtTest {
     the tree is invalid red-black tree, and any other number is the black height
     of the entire tree.
      */
-    private fun <K : Comparable<K>, V>isRbt(root: RBTNode<K, V>?): Int {
+    private fun <K : Comparable<K>, V> isRbt(root: RBTNode<K, V>?): Int {
         if (root == null) {
             return 1
         }

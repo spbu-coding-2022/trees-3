@@ -1,6 +1,6 @@
 package bst.nodes
 
-class RBTNode<K : Comparable<K>, V> (
+class RBTNode<K : Comparable<K>, V>(
     key: K,
     value: V,
     var color: Color = Color.RED

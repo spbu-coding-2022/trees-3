@@ -21,37 +21,42 @@ class RedBlackTree<K : Comparable<K>, V> : BalancingTree<K, V, RBTNode<K, V>>() 
             val head = initNode(key, value) // False tree root
 
             var grandparent: RBTNode<K, V>? = null
-            var t: RBTNode<K, V> = head // Iterator
+            var t: RBTNode<K, V> = head // Helper
             var parent: RBTNode<K, V>? = null
 
             t.right = rootNode
-            var q: RBTNode<K, V>? = t.right
-            var dir = false // false - left, true - right
+            var iter: RBTNode<K, V>? = t.right
+            /*
+              true is for right child
+              false is for left child
+             */
+            var direction = false
+            /* Last direction */
             var last = false
 
             // Search down the tree
             while (true) {
-                if (q == null) {
+                if (iter == null) {
                     // Insert new node at the bottom
-                    q = initNode(key, value)
-                    if (dir) parent?.right = q else parent?.left = q
-                } else if (isRed(q.left) && isRed(q.right)) {
+                    iter = initNode(key, value)
+                    if (direction) parent?.right = iter else parent?.left = iter
+                } else if (isRed(iter.left) && isRed(iter.right)) {
                     // Color flip
-                    q.color = RBTNode.Color.RED
-                    q.left?.color = RBTNode.Color.BLACK
-                    q.right?.color = RBTNode.Color.BLACK
+                    iter.color = RBTNode.Color.RED
+                    iter.left?.color = RBTNode.Color.BLACK
+                    iter.right?.color = RBTNode.Color.BLACK
                 }
                 // Fix red violation
-                if (isRed(q) && isRed(parent) && grandparent != null) {
+                if (isRed(iter) && isRed(parent) && grandparent != null) {
                     val dir2 = t.child(true) == grandparent
                     if (dir2) {
-                        if (q == parent?.child(last)) {
+                        if (iter == parent?.child(last)) {
                             t.right = rotate(grandparent, !last)
                         } else {
                             t.right = doubleRotate(grandparent, !last)
                         }
                     } else {
-                        if (q == parent?.child(last)) {
+                        if (iter == parent?.child(last)) {
                             t.left = rotate(grandparent, !last)
                         } else {
                             t.left = doubleRotate(grandparent, !last)
@@ -60,19 +65,19 @@ class RedBlackTree<K : Comparable<K>, V> : BalancingTree<K, V, RBTNode<K, V>>() 
                 }
 
                 // Stop if found
-                if (q.key == key) {
-                    q.value = value
+                if (iter.key == key) {
+                    iter.value = value
                     break
                 }
 
-                last = dir
-                dir = q.key < key
+                last = direction
+                direction = iter.key < key
 
                 // Update helpers
                 t = grandparent ?: t
                 grandparent = parent
-                parent = q
-                q = q.child(dir)
+                parent = iter
+                iter = iter.child(direction)
             }
 
             // Update root
@@ -80,50 +85,62 @@ class RedBlackTree<K : Comparable<K>, V> : BalancingTree<K, V, RBTNode<K, V>>() 
         }
         rootNode?.color = RBTNode.Color.BLACK
     }
+
     override fun remove(key: K) {
         removeNode(key)
     }
+
+
     private fun removeNode(key: K): Int {
         if (rootNode != null) {
-            val head = initNode(key, "" as V) // False tree root
-            var q: RBTNode<K, V> = head
+            /*
+              False tree root.
+              If someone knows how to do it
+              without ugly cast make a pull request please
+             */
+            val head = initNode(key, "" as V)
+            var iter: RBTNode<K, V> = head
             var parent: RBTNode<K, V>? = null
             var grandparent: RBTNode<K, V>?
-            var f: RBTNode<K, V>? = null /* Found item's parent */
-            var dir = true
+            var nodeToDelete: RBTNode<K, V>? = null
+            /*
+              true is for right child
+              false is for left child
+             */
+            var direction = true
 
-            q.right = rootNode
+            iter.right = rootNode
 
             /*
               Search and push a red node down
               to fix red violations as we go
             */
-            while (q.child(dir) != null) {
-                val last = dir
+            while (iter.child(direction) != null) {
+                val last = direction
 
                 /* Move the helpers down */
                 grandparent = parent
-                parent = q
-                q = parent.child(dir) ?: throw IllegalStateException("Parent node cannot be null")
-                dir = q.key < key
+                parent = iter
+                iter = parent.child(direction) ?: throw IllegalStateException("Parent node cannot be null")
+                direction = iter.key < key
 
                 /*
-                  Save parent of the node with matching data and keep
+                  Save the node with matching data and keep
                   going; we'll do removal tasks at the end
                 */
-                if (q.key == key) {
-                    f = q
+                if (iter.key == key) {
+                    nodeToDelete = iter
                 }
                 /* Push the red node down with rotations and color flips */
-                if (!isRed(q) && !isRed(q.child(dir))) {
-                    if (isRed(q.child(!dir))) {
+                if (!isRed(iter) && !isRed(iter.child(direction))) {
+                    if (isRed(iter.child(!direction))) {
                         if (last) {
-                            parent.right = rotate(q, dir)
+                            parent.right = rotate(iter, direction)
                         } else {
-                            parent.left = rotate(q, dir)
+                            parent.left = rotate(iter, direction)
                         }
                         parent = parent.child(last)
-                    } else if (!isRed(q.child(!dir))) {
+                    } else if (!isRed(iter.child(!direction))) {
                         val s = parent.child(!last)
 
                         if (s != null) {
@@ -131,9 +148,10 @@ class RedBlackTree<K : Comparable<K>, V> : BalancingTree<K, V, RBTNode<K, V>>() 
                                 /* Color flip */
                                 parent.color = RBTNode.Color.BLACK
                                 s.color = RBTNode.Color.RED
-                                q.color = RBTNode.Color.RED
+                                iter.color = RBTNode.Color.RED
                             } else {
-                                val dir2 = (grandparent?.right ?: throw IllegalStateException("Grandparent node cannot be null")) == parent
+                                val dir2 = (grandparent?.right
+                                    ?: throw IllegalStateException("Grandparent node cannot be null")) == parent
 
                                 if (isRed(s.child(last))) {
                                     if (dir2) {
@@ -149,7 +167,7 @@ class RedBlackTree<K : Comparable<K>, V> : BalancingTree<K, V, RBTNode<K, V>>() 
                                     }
                                 }
                                 /* Ensure correct coloring */
-                                q.color = RBTNode.Color.RED
+                                iter.color = RBTNode.Color.RED
                                 grandparent.child(dir2)?.color = RBTNode.Color.RED
                                 grandparent.child(dir2)?.left?.color = RBTNode.Color.BLACK
                                 grandparent.child(dir2)?.right?.color = RBTNode.Color.BLACK
@@ -160,13 +178,13 @@ class RedBlackTree<K : Comparable<K>, V> : BalancingTree<K, V, RBTNode<K, V>>() 
             }
 
             /* Replace and remove the saved node */
-            if (f != null) {
-                f.key = q.key
-                f.value = q.value
-                if (parent?.right == q) {
-                    parent.right = q.child(q.left == null)
+            if (nodeToDelete != null) {
+                nodeToDelete.key = iter.key
+                nodeToDelete.value = iter.value
+                if (parent?.right == iter) {
+                    parent.right = iter.child(iter.left == null)
                 } else {
-                    parent?.left = q.child(q.left == null)
+                    parent?.left = iter.child(iter.left == null)
                 }
             }
 
