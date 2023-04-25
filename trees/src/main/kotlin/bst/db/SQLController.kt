@@ -79,6 +79,7 @@ class SQLController {
             this@getSerializedNode.value,
             this@getSerializedNode.x,
             this@getSerializedNode.y,
+            null,
             this@getSerializedNode.left?.getSerializedNode(treeDao),
             this@getSerializedNode.right?.getSerializedNode(treeDao),
         )
@@ -119,7 +120,7 @@ class SQLController {
 
     private fun deserializeTree(tree: SerializableTree?): BSTree<Int, String>?{
         if (tree != null) {
-             if (isNumeric(tree.rootNode.key)){
+             if (isNumeric(tree.rootNode!!.key)){
                 val rootNode = deserializeNodeDoubleKey(tree.rootNode)
                 val deserializedTree:BSTree<Int,String> = BSTree(rootNode?.key, rootNode?.value)
                 deserializedTree.rootNode = rootNode
