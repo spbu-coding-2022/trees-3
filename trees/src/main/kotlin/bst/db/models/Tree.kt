@@ -1,4 +1,4 @@
-package db
+package bst.db.models
 
 import org.jetbrains.exposed.dao.IntEntity
 import org.jetbrains.exposed.dao.IntEntityClass

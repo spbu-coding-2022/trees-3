@@ -1,5 +1,4 @@
-package db
-import db.Trees.default
+package bst.db.models
 import org.jetbrains.exposed.dao.id.IntIdTable
 import org.jetbrains.exposed.sql.ReferenceOption
 

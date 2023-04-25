@@ -1,6 +1,8 @@
-package bst.db
+package bst.db.controllers
 
 import bst.RedBlackTree
+import bst.db.serializeClasses.SerializableNode
+import bst.db.serializeClasses.SerializableTree
 import bst.nodes.RBTNode
 import bst.nodes.RBTNode.Color
 import org.neo4j.ogm.annotation.GeneratedValue
