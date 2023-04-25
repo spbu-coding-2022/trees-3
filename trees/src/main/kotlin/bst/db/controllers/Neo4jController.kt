@@ -15,6 +15,7 @@ class Neo4jController(config: Configuration) {
     private val sessionFactory = SessionFactory(config, "bst")
     private val session = sessionFactory.openSession()
 
+
     private fun RBTNode<*, *>?.toSerializableNode(): SerializableNode? {
         if (this == null) {
             return null
