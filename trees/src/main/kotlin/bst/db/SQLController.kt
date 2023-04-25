@@ -9,8 +9,6 @@ import db.Tree
 import org.jetbrains.exposed.sql.transactions.transaction
 
 
-private const val dbPath = "exposed_database.db"
-
 class SQLController {
     private fun connectDB() {
         Database.connect("jdbc:postgresql://localhost:5432/test", driver = "org.postgresql.Driver",
@@ -69,7 +67,7 @@ class SQLController {
             createTables()
             val daoTree = Tree.new {
                 if(serializedTree!=null)
-                name = serializedTree.treeName
+                    name = serializedTree.treeName
             }
             daoTree.rootNode = serializedTree?.rootNode?.toNodeDao(daoTree)
         }
@@ -100,71 +98,43 @@ class SQLController {
 
     private fun isNumeric(s: String): Boolean {
         return try {
-            s.toDouble()
+            s.toInt()
             true
         } catch (e: NumberFormatException) {
             false
         }
     }
+    
 
-    private fun deserializeNodeStringKey(node: SerializableNode?): BSTNode<String, String>? {
+    private fun deserializeNodeDoubleKey(node: SerializableNode?): BSTNode<Int, String>? {
         return if (node == null){
             null
         } else{
-
-            val deserializableNode = BSTNode(key = node.key, value = node.value)
-            deserializableNode.right = deserializeNodeStringKey(node.rightNode)
-            deserializableNode.left = deserializeNodeStringKey(node.leftNode)
-            deserializableNode
-        }
-    }
-
-    private fun deserializeNodeDoubleKey(node: SerializableNode?): BSTNode<Double, String>? {
-        return if (node == null){
-            null
-        } else{
-            val deserializableNode = BSTNode(key = node.key.toDouble(), value = node.value)
+            val deserializableNode = BSTNode(key = node.key.toInt(), value = node.value)
             deserializableNode.right = deserializeNodeDoubleKey(node.rightNode)
             deserializableNode.left = deserializeNodeDoubleKey(node.leftNode)
             deserializableNode
         }
     }
 
-    private fun deserializeTree(tree: SerializableTree?): BSTree<*, *>?{
+    private fun deserializeTree(tree: SerializableTree?): BSTree<Int, String>?{
         if (tree != null) {
-            return if (isNumeric(tree.rootNode.key)){
+             if (isNumeric(tree.rootNode.key)){
                 val rootNode = deserializeNodeDoubleKey(tree.rootNode)
-                val deserializedTree = BSTree(rootNode?.key, rootNode?.value)
+                val deserializedTree:BSTree<Int,String> = BSTree(rootNode?.key, rootNode?.value)
                 deserializedTree.rootNode = rootNode
                 deserializedTree.setName(tree.treeName)
-                deserializedTree
-            } else{
-                val rootNode = deserializeNodeStringKey(tree.rootNode)
-                val deserializedTree = BSTree(rootNode?.key, rootNode?.value)
-                deserializedTree.rootNode = rootNode
-                deserializedTree.setName(tree.treeName)
-                deserializedTree
+                 return deserializedTree
             }
         }
-    return null
+        return null
     }
 
-    fun getTree(treeName: String): BSTree<*, *>? {
+    fun getTree(treeName: String): BSTree<Int, String>? {
         var  deserializedTree:SerializableTree? = null
         transaction {
-             deserializedTree = findTree(treeName)
+            deserializedTree = findTree(treeName)
         }
-        return deserializeTree( deserializedTree)
+        return deserializeTree(deserializedTree)
     }
-}
-fun main(){
-    val test_data = BSTree(121, "dgs")
-    test_data.insert(110, "dafad")
-    test_data.insert(118, "adfaf")
-    test_data.insert(124, "fggsg")
-    test_data.setName("afefadsf")
-    val controller = SQLController()
-//    val serializedTree = controller.serializeTree(test_data)
-    controller.saveTreeToDB(test_data)
-    val remTree = controller.getTree("afefadsf")
 }

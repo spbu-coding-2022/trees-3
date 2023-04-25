@@ -7,7 +7,6 @@ import org.junit.jupiter.api.Assertions.assertNull
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
-import bst.BSTree
 
 class BstTest {
     private fun <K : Comparable<K>, V> isBst(root: BSTNode<K, V>?): Boolean {
