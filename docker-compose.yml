@@ -1,0 +1,12 @@
+version: "3"
+services:
+  local-database:
+    image: "postgres:15.2"
+    env_file:
+      - postgres.env
+    ports:
+      - "5432:5432"
+    volumes:
+      - pg-volume:/var/lib/postgresql/data
+volumes:
+  pg-volume: {}
