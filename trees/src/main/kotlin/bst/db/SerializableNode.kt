@@ -2,7 +2,7 @@ package bst.db
 import kotlinx.serialization.*
 
 @Serializable
-class SerializableNode(
+class SerializableNode (
     val key: String,
     val value : String,
     var x : Double = 0.0,
