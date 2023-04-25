@@ -19,8 +19,10 @@ dependencies {
     // Use the JUnit 5 integration.
     testImplementation("org.junit.jupiter:junit-jupiter-engine:5.9.2")
 
+    implementation ("io.github.microutils:kotlin-logging-jvm:2.0.11")
 
-    implementation("org.slf4j", "slf4j-simple", "1.7.29")
+
+    implementation("org.slf4j", "slf4j-simple", "2.0.0")
 
 
     implementation("org.neo4j:neo4j-ogm-core:4.0.5")
@@ -36,7 +38,6 @@ dependencies {
 
     implementation("org.xerial:sqlite-jdbc:3.41.2.1")
 
-    implementation("io.github.microutils", "kotlin-logging-jvm", "2.0.6")
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.5.0")
     implementation("org.postgresql:postgresql:42.5.4")
 
