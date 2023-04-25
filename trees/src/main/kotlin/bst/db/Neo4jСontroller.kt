@@ -42,7 +42,10 @@ class Neo4j(config: Configuration) {
     private val sessionFactory = SessionFactory(config, "bst")
     private val session = sessionFactory.openSession()
 
-    private fun RBTNode<*, *>.toSerializableNode(): SerializableNode {
+    private fun RBTNode<*, *>?.toSerializableNode(): SerializableNode? {
+        if (this == null) {
+            return null
+        }
         return SerializableNode(key.toString(), value.toString(), 0.0, 0.0,
             color.toString(), left?.toSerializableNode(), right?.toSerializableNode())
     }
