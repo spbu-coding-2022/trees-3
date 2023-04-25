@@ -65,14 +65,14 @@ class RbtTest {
     }
 
     @Test
-    fun `Empty tree`() {
+    fun `validate tree if empty`() {
         assertNull(tree.rootNode)
         assertEquals(0, countNodes(tree.rootNode))
         assertNotEquals(0, isRbt(tree.rootNode))
     }
 
     @Test
-    fun `Check invariants after each action`() {
+    fun `verify invariants after each action`() {
         values.take(1000).forEach {
             tree.insert(it, it.toString())
             assertNotEquals(0, isRbt(tree.rootNode))
@@ -87,7 +87,7 @@ class RbtTest {
     @Nested
     inner class InsertionTests {
         @Test
-        fun `Single insertion`() {
+        fun `insert single key-value pair`() {
             tree.insert(1, "A")
             assertEquals(1, tree.rootNode?.key)
             assertEquals(1, countNodes(tree.rootNode))
@@ -95,7 +95,7 @@ class RbtTest {
         }
 
         @Test
-        fun `Bigger insertion`() {
+        fun `insert a few key-value pairs`() {
             tree.insert(19, "S")
             tree.insert(5, "E")
             tree.insert(1, "A")
@@ -109,7 +109,7 @@ class RbtTest {
         }
 
         @Test
-        fun `Same key inserted twice`() {
+        fun `insert same key twice`() {
             tree.insert(1, "A")
             tree.insert(1, "B")
             assertEquals(1, countNodes(tree.rootNode))
@@ -121,7 +121,7 @@ class RbtTest {
     @Nested
     inner class DeleteTests {
         @Test
-        fun `Single deletion`() {
+        fun `delete one key-value pair`() {
             tree.insert(2, "B")
             tree.remove(2)
             assertEquals(0, countNodes(tree.rootNode))
@@ -129,7 +129,7 @@ class RbtTest {
         }
 
         @Test
-        fun `Non-existent key deletion`() {
+        fun `delete non-existent key-value pair`() {
             tree.insert(2, "B")
             tree.remove(3)
             assertEquals(1, countNodes(tree.rootNode))
@@ -137,7 +137,7 @@ class RbtTest {
         }
 
         @Test
-        fun `Multiple deletions`() {
+        fun `delete a few key-value pairs`() {
             tree.insert(19, "S")
             tree.insert(5, "E")
             tree.insert(1, "A")
@@ -153,7 +153,7 @@ class RbtTest {
         }
 
         @Test
-        fun `Many deletions`() {
+        fun `delete many key-value pairs`() {
             values.shuffle()
             values.forEach { tree.insert(it, it.toString()) }
             values.take(500_000).forEach { tree.remove(it) }

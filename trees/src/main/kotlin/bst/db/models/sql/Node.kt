@@ -1,4 +1,4 @@
-package bst.db.models
+package bst.db.models.sql
 import org.jetbrains.exposed.dao.*
 import org.jetbrains.exposed.dao.id.EntityID
 
@@ -14,7 +14,3 @@ class Node(id: EntityID<Int>): IntEntity(id) {
     override fun toString(): String = "Node(key = $key, value=$value, x=$x, y=$y, left=$left, right=$right, tree=$tree)"
 
 }
-
-//class NodeSerialize(){
-//
-//}
