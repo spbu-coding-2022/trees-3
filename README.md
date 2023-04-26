@@ -4,6 +4,7 @@
 ![Kotlin](https://img.shields.io/badge/-Kotlin-61DAFB?logo=kotlin)
 ![Junit](https://img.shields.io/badge/Tests-Junit-green)
 ![Postgresql](https://img.shields.io/badge/PostgreSQL-316192?style=for-the-badge&logo=postgresql&logoColor=white)
+![Neo4j](https://img.shields.io/badge/Neo4j-008CC1?style=for-the-badge&logo=neo4j&logoColor=white)
 ![Docker](https://img.shields.io/badge/Docker-316192?style=for-the-badge&logo=Docker&logoColor=white)
 ## :package: Getting started
 To build the library run
