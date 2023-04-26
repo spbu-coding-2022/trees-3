@@ -1,17 +1,18 @@
 # Trees library.
-> An open source library written in Kotlin to work with data structures such as AVL tree, red-black tree, and binary search tree..
+> An open source library written in Kotlin to work with data structures such as AVL tree, red-black tree, and binary search tree.
 ## 🖍 Used technology
 ![Kotlin](https://img.shields.io/badge/-Kotlin-61DAFB?logo=kotlin)
 ![Junit](https://img.shields.io/badge/Tests-Junit-green)
+![Neo4j](https://img.shields.io/badge/Neo4j-008CC1?style=for-the-badge&logo=neo4j&logoColor=white)
 ![Postgresql](https://img.shields.io/badge/PostgreSQL-316192?style=for-the-badge&logo=postgresql&logoColor=white)
 ![Docker](https://img.shields.io/badge/Docker-316192?style=for-the-badge&logo=Docker&logoColor=white)
 ## :package: Getting started
 To build the library run
 
 ```sh
-  ./gradlew build
+./gradlew build
 ```
-To run postgresql with docker:
+To run PostgreSQL with docker:
 ```
 ./run-db.sh
 ```
@@ -20,54 +21,53 @@ or
 ./run-db.bat
 ```
 
-## Using Binary search tree
-Any `Comparable` data can be stored in trees.
-Example:
+## Using binary search trees
+Any data (provided with `Comparable` key) can be stored in trees.
+For example:
 
 ```kotlin
     import bst.BSTree
-    val testData = BSTree(121, "dgs")
-    testData.insert(110, "dafad")
-    testData.insert(118, "adfaf")
-    testData.insert(124, "fggsg")
+    val tree = BSTree(1, "apple")
+    tree.insert(7, "orange")
+    tree.insert(28, "Alice")
+    tree.insert(4, "Bob")
 ```
-BSTree constructor gets two params: key and value.
-insert method also gets same params and add node with key and value in tree.
-Method setName allows you to set name of tree, as argument it takes the string.
+Constructor takes two arguments: `key` and `value`, thus instantiating a root node (you can delete it, 
+but you cannot create an empty tree).
+`insert` method also takes same arguments and adds a node with specified `key` and `value` properties to the tree.
+Method `setName` allows you to set the name of a tree.
 
 Find or remove element from tree:
-```kotlin    
-    testData.remove(124)
-    testData.find(118)
+```kotlin
+    tree.find(4) // returns "Bob"
+    tree.remove(1) 
 ```
-As a parameter to the find and remove methods take a key-value node
+`find` and `remove` methods take some `Comparable` key as an argument.
 
-Same operations support red black tree and AVL tree.
+AVL and red-black trees implement the same methods.
 
-
-AVL tree supports conservation tree object to json file, and receiving tree from json.
+## Storing binary search trees
+AVL tree can be saved to and loaded from JSON file. 
 For example:
 ```kotlin
-    val test = AVLTree(1231, "afea")
-    test.insert(2123, "adf")
-    test.insert(2123, "adf")
-    test.setName("test_1")
-    val control = JsonController()
-    control.saveTreeToJson(test)
-    println(control.readFromJson("test_1")?.treeName)
+    val tree = AVLTree(1, "apple")
+    tree.setName("test")
+    val controller = JsonController()
+    controller.saveTreeToJson(test)
+    println(controller.readFromJson("test")?.treeName)
 ```
-
-Also you can save binary search tree to sql database:
-```
-    val test_data = BSTree(121, "dgs")
-    test_data.insert(110, "dafad")
-    test_data.insert(118, "adfaf")
-    test_data.insert(124, "fggsg")
-    test_data.setName("afefadsf")
+You can also save binary search tree to SQL database:
+```kotlin
+    val tree = BSTree(1, "apple")
+    tree.setName("test")
     val controller = SQLController()
     controller.saveTreeToDB(test_data)
-    val remTree = controller.getTree("afefadsf")
+    val remTree = controller.getTree("test")
 ```
-And you can save red black tree to neo4j database
-```
+And you can save red-black tree to Neo4j database
+```kotlin
+    val tree = RedBlackTree(1, "apple")
+    val controller = Neoj4Conroller()
+    contoller.saveTree(tree)
+    val remTree = controller.loadTree("test")
 ```
