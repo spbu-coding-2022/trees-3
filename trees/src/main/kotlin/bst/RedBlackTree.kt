@@ -1,8 +1,17 @@
 package bst
-
 import bst.nodes.RBTNode
 
-class RedBlackTree<K : Comparable<K>, V> : BalancingTree<K, V, RBTNode<K, V>>() {
+class RedBlackTree<K : Comparable<K>, V>(@Transient val key: K? = null, @Transient val value: V? = null) : BalancingTree<K, V, RBTNode<K, V>>() {
+
+    init {
+        if (key != null && value != null) {
+            rootNode = initNode(key, value)
+        }
+    }
+
+    fun setName(treeName: String){
+        this.treeName = treeName
+    }
     private fun isRed(node: RBTNode<K, V>?): Boolean {
         return node != null && node.color == RBTNode.Color.RED
     }

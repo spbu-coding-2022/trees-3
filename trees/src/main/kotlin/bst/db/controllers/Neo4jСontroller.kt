@@ -133,3 +133,4 @@ class Neo4j(config: Configuration) {
     fun getNames() = session.query("MATCH (n: TreeEntity) RETURN n.treeName", mapOf<String, String>()).
         flatMap { it.values.map { value -> value.toString() } }
 }
+

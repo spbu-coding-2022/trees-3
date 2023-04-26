@@ -3,9 +3,17 @@ package bst
 import bst.nodes.AVLNode
 import kotlin.math.max
 
-class AVLTree<K : Comparable<K>, V> : BalancingTree<K, V, AVLNode<K, V>>() {
+class AVLTree<K : Comparable<K>, V>(@Transient val key: K? = null, @Transient val value: V? = null) : BalancingTree<K, V, AVLNode<K, V>>() {
     override fun initNode(key: K, value: V): AVLNode<K, V> = AVLNode(key, value)
 
+    init {
+        if (key != null && value != null) {
+            rootNode = initNode(key, value)
+        }
+    }
+    fun setName(treeName: String){
+        this.treeName = treeName
+    }
     override fun insertNode(node: AVLNode<K, V>?, key: K, value: V): AVLNode<K, V> {
         if (node == null) return initNode(key, value)
         if (key < node.key) {
