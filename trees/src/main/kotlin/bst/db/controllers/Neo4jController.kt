@@ -10,9 +10,14 @@ import bst.nodes.RBTNode.Color
 import org.neo4j.ogm.config.Configuration
 import org.neo4j.ogm.session.SessionFactory
 
-class Neo4jController(config: Configuration) {
+class Neo4jController {
+    private val config = Configuration.Builder()
+        .uri("bolt://localhost")
+        .credentials("neo4j", "password")
+        .build()
     private val sessionFactory = SessionFactory(config, "bst")
     private val session = sessionFactory.openSession()
+
 
 
     private fun RBTNode<*, *>?.toSerializableNode(): SerializableNode? {
@@ -88,18 +93,21 @@ class Neo4jController(config: Configuration) {
         )
     }
 
-    fun loadDeserialized(name: String): RedBlackTree<Int, String> {
-        val tree = getTree(name)
+    fun getTree(name: String): RedBlackTree<Int, String> {
+        val tree = loadTree(name)
         return deserializeTree(tree.toSerializableTree())
     }
 
     //  Could be useful for underlying logic of GUI
+    /*
     fun loadSerialized(name: String): SerializableTree {
         val tree = getTree(name)
         return tree.toSerializableTree()
     }
 
-    private fun getTree(name: String): TreeEntity {
+     */
+
+    private fun loadTree(name: String): TreeEntity {
         return session.queryForObject(
             TreeEntity::class.java,
             "MATCH (n)-[r *1..]-(m) " + "WHERE n.treeName = \$name RETURN n, r, m",
@@ -110,4 +118,3 @@ class Neo4jController(config: Configuration) {
     fun getNames() = session.query("MATCH (n: TreeEntity) RETURN n.treeName", mapOf<String, String>())
         .flatMap { it.values.map { value -> value.toString() } }
 }
-
