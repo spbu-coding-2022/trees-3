@@ -1,4 +1,4 @@
-# Trees library.
+# Binary search trees library.
 > An open source library written in Kotlin to work with data structures such as AVL tree, red-black tree, and binary search tree.
 ## 🖍 Used technology
 ![Kotlin](https://img.shields.io/badge/-Kotlin-61DAFB?logo=kotlin)
@@ -14,11 +14,11 @@ To build the library run
 ```
 To run PostgreSQL with docker:
 ```
-./run-db.sh
+./start-db.sh
 ```
 or
 ```
-./run-db.bat
+./start-db.bat
 ```
 
 ## Using binary search trees
@@ -67,6 +67,7 @@ You can also save binary search tree to SQL database:
 And you can save red-black tree to Neo4j database
 ```kotlin
     val tree = RedBlackTree(1, "apple")
+    tree.setName("test")
     val controller = Neoj4Conroller()
     contoller.saveTree(tree)
     val remTree = controller.loadTree("test")
