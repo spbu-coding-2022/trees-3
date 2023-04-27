@@ -1,12 +1,12 @@
 plugins {
     id("org.jetbrains.kotlin.jvm") version "1.8.10"
-    id("org.openjfx.javafxplugin") version "0.0.8"
+    id("org.openjfx.javafxplugin") version "0.0.12"
     application
 }
 
 javafx {
-    version = "11.0.2"
-    modules("javafx.controls")
+    version = "17"
+    modules ( "javafx.controls", "javafx.fxml" )
 }
 
 repositories {

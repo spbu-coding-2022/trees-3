@@ -1,10 +1,15 @@
 package app.view
-
+import app.view.treeView.BinarySearchTreeView
 import tornadofx.*
 
-class MainView: View("Trees") {
-    override val root = vbox {
-        button("Hello, World!")
-        label("Waiting")
+class MainView: View(){
+    private val tree = BinarySearchTreeView()
+    override val root = borderpane {
+        center{
+            add(tree)
+        }
+        left{
+            button("reset")
+        }
     }
 }
