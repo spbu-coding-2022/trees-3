@@ -1,12 +1,22 @@
-name: Lint Codebase
+name: Lint Code Base
 
 on:
   push:
+    branches: main
   pull_request:
+    branches: main
 
 jobs:
-  run-lint:
+  build:
+    name: Lint Code Base
+
     runs-on: ubuntu-latest
+
+    permissions:
+      contents: read
+      packages: read
+      statuses: write
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
