@@ -10,7 +10,7 @@ import bst.nodes.RBTNode.Color
 import org.neo4j.ogm.config.Configuration
 import org.neo4j.ogm.session.SessionFactory
 
-class Neo4jController {
+class Neo4jController: Controller<RBTNode<Int, String>, RedBlackTree<Int, String>> {
     private val config = Configuration.Builder()
         .uri("bolt://localhost")
         .credentials("neo4j", "password")
@@ -35,7 +35,7 @@ class Neo4jController {
         )
     }
 
-    private fun RedBlackTree<*, *>.toSerializableTree(): SerializableTree {
+    private fun RedBlackTree<*, *>.toSerializableTree(treeName: String): SerializableTree {
         return SerializableTree(treeName, rootNode?.toSerializableNode())
     }
 
@@ -68,7 +68,6 @@ class Neo4jController {
     private fun deserializeTree(tree: SerializableTree): RedBlackTree<Int, String> {
         val rbTree = RedBlackTree<Int, String>()
         rbTree.rootNode = deserializeNode(tree.rootNode)
-        rbTree.treeName = tree.treeName
         return rbTree
     }
 
@@ -80,39 +79,31 @@ class Neo4jController {
         }
     }
 
-    fun saveTree(tree: RedBlackTree<*, *>) {
-        removeTree(tree.treeName)
-        val entityTree = tree.toSerializableTree().toTreeEntity()
+    override fun saveTree(tree: RedBlackTree<Int, String>, treeName: String) {
+        removeTree(treeName)
+        val entityTree = tree.toSerializableTree(treeName).toTreeEntity()
+        entityTree.treeName = treeName
         session.save(entityTree)
         session.query("MATCH (n: BinaryNode) WHERE NOT (n)--() DELETE (n)", mapOf<String, String>())
     }
 
-    fun removeTree(name: String) {
+    override fun removeTree(treeName: String) {
         session.query(
-            "MATCH (n)-[r *0..]->(m) " + "WHERE n.treeName = \$name DETACH DELETE m", mapOf("name" to name)
+            "MATCH (n)-[r *0..]->(m) " + "WHERE n.treeName = \$treeName DETACH DELETE m", mapOf("treeName" to treeName)
         )
     }
 
-    fun getTree(name: String): RedBlackTree<Int, String> {
-        val tree = loadTree(name)
-        return deserializeTree(tree.toSerializableTree())
+    override fun getTree(treeName: String): RedBlackTree<Int, String>? {
+        val tree = loadTree(treeName)
+        return tree?.let { deserializeTree(it.toSerializableTree()) }
     }
 
-    //  Could be useful for underlying logic of GUI
-    /*
-    fun loadSerialized(name: String): SerializableTree {
-        val tree = getTree(name)
-        return tree.toSerializableTree()
-    }
-
-     */
-
-    private fun loadTree(name: String): TreeEntity {
+    private fun loadTree(treeName: String): TreeEntity? {
         return session.queryForObject(
             TreeEntity::class.java,
-            "MATCH (n)-[r *1..]-(m) " + "WHERE n.treeName = \$name RETURN n, r, m",
-            mapOf("name" to name)
-        ) ?: throw NoSuchElementException("No tree with that name has been found")
+            "MATCH (n)-[r *1..]-(m) " + "WHERE n.treeName = \$treeName RETURN n, r, m",
+            mapOf("treeName" to treeName)
+        ) ?: null
     }
 
     fun getNames() = session.query("MATCH (n: TreeEntity) RETURN n.treeName", mapOf<String, String>())

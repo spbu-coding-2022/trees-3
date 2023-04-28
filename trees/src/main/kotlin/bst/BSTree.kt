@@ -11,8 +11,4 @@ class BSTree<K : Comparable<K>, V>(@Transient val key: K? = null, @Transient val
             rootNode = initNode(key, value)
         }
     }
-
-    fun setName(treeName: String) {
-        this.treeName = treeName
-    }
 }
