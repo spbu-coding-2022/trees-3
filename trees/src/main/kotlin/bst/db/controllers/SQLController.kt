@@ -12,27 +12,27 @@ import bst.db.models.sql.Tree
 import org.jetbrains.exposed.sql.transactions.transaction
 
 
-class SQLController {
+class SQLController: Controller<BSTNode<Int, String>, BSTree<Int, String>>{
     private fun connectDB() {
         Database.connect(
             "jdbc:postgresql://localhost:5432/test", driver = "org.postgresql.Driver", user = "test", password = "test"
         )
     }
 
-    private fun deleteTree(treeName: String) {
+    override fun removeTree(treeName: String) {
         transaction {
             val treeEntity = Tree.find { (Trees.name eq treeName) }.firstOrNull()
             treeEntity?.delete()
         }
     }
 
-    private fun serializeNode(node: BSTNode<*, *>?): SerializableNode? {
+    private fun serializeNode(node: BSTNode<Int, String>?): SerializableNode? {
         return if (node == null) {
             null
         } else {
             val serializableNode = SerializableNode(
                 key = node.key.toString(),
-                value = node.value.toString(),
+                value = node.value,
                 leftNode = null,
                 rightNode = null
             )
@@ -42,9 +42,9 @@ class SQLController {
         }
     }
 
-    private fun serializeTree(tree: BSTree<*, *>): SerializableTree? {
+    private fun serializeTree(tree: BSTree<Int, String>, treeName: String): SerializableTree? {
         return tree.rootNode?.let { serializeNode(it) }
-            ?.let { SerializableTree(treeName = tree.treeName, rootNode = it) }
+            ?.let { SerializableTree(treeName = treeName, rootNode = it) }
     }
 
     private fun createTables() {
@@ -65,10 +65,10 @@ class SQLController {
         }
     }
 
-    fun saveTreeToDB(tree: BSTree<*, *>) {
+    override fun saveTree(tree: BSTree<Int, String>, treeName: String) {
         connectDB()
-        deleteTree(tree.treeName)
-        val serializedTree = serializeTree(tree)
+        removeTree(treeName)
+        val serializedTree = serializeTree(tree, treeName)
         transaction {
             addLogger(StdOutSqlLogger)
             createTables()
@@ -136,7 +136,7 @@ class SQLController {
         return null
     }
 
-    fun getTree(treeName: String): BSTree<Int, String>? {
+    override fun getTree(treeName: String): BSTree<Int, String>? {
         var deserializedTree: SerializableTree? = null
         transaction {
             deserializedTree = findTree(treeName)

@@ -3,7 +3,6 @@ package bst
 import bst.nodes.BinaryNode
 
 abstract class AbstractBST<K : Comparable<K>, V, Self : BinaryNode<K, V, Self>> : Tree<K, V> {
-    var treeName: String = ""
 
     internal var rootNode: Self? = null
 

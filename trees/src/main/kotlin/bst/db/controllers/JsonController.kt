@@ -1,15 +1,17 @@
 package bst.db.controllers
 
 import bst.AVLTree
+import bst.nodes.AVLNode
 import com.google.gson.Gson
+import java.io.File
 import java.io.FileReader
 import java.io.FileWriter
 
-class JsonController {
-    fun saveTreeToJson(tree: AVLTree<Int, String>) {
+class JsonController: Controller<AVLNode<Int, String>, AVLTree<Int, String>> {
+    override fun saveTree(tree: AVLTree<Int, String>, treeName: String) {
         val gson = Gson()
         try {
-            val writer = FileWriter("${tree.treeName}.json")
+            val writer = FileWriter("$treeName.json")
             gson.toJson(tree, writer)
             writer.close()
         } catch (e: Exception) {
@@ -17,7 +19,7 @@ class JsonController {
         }
     }
 
-    fun readFromJson(treeName: String): AVLTree<Int, String>? {
+    override fun getTree(treeName: String): AVLTree<Int, String>? {
         val gson = Gson()
         return try {
             val reader = FileReader("$treeName.json")
@@ -28,5 +30,9 @@ class JsonController {
             println("read error")
             null
         }
+    }
+
+    override fun removeTree(treeName: String) {
+        File("$treeName.json").delete()
     }
 }
