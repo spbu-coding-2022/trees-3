@@ -1,7 +1,10 @@
 package bst
+
 import bst.nodes.RBTNode
 
 class RedBlackTree<K : Comparable<K>, V>(@Transient val key: K? = null, @Transient val value: V? = null) : BalancingTree<K, V, RBTNode<K, V>>() {
+
+    override fun initNode(key: K, value: V): RBTNode<K, V> = RBTNode(key, value)
 
     init {
         if (key != null && value != null) {
@@ -30,11 +33,11 @@ class RedBlackTree<K : Comparable<K>, V>(@Transient val key: K? = null, @Transie
             val head = initNode(key, value) // False tree root
 
             var grandparent: RBTNode<K, V>? = null
-            var t: RBTNode<K, V> = head // Helper
+            var helper: RBTNode<K, V> = head
             var parent: RBTNode<K, V>? = null
 
-            t.right = rootNode
-            var iter: RBTNode<K, V>? = t.right
+            helper.right = rootNode
+            var iter: RBTNode<K, V>? = helper.right
             /*
               true is for right child
               false is for left child
@@ -57,18 +60,18 @@ class RedBlackTree<K : Comparable<K>, V>(@Transient val key: K? = null, @Transie
                 }
                 // Fix red violation
                 if (isRed(iter) && isRed(parent) && grandparent != null) {
-                    val dir2 = t.child(true) == grandparent
+                    val dir2 = helper.child(true) == grandparent
                     if (dir2) {
                         if (iter == parent?.child(last)) {
-                            t.right = rotate(grandparent, !last)
+                            helper.right = rotate(grandparent, !last)
                         } else {
-                            t.right = doubleRotate(grandparent, !last)
+                            helper.right = doubleRotate(grandparent, !last)
                         }
                     } else {
                         if (iter == parent?.child(last)) {
-                            t.left = rotate(grandparent, !last)
+                            helper.left = rotate(grandparent, !last)
                         } else {
-                            t.left = doubleRotate(grandparent, !last)
+                            helper.left = doubleRotate(grandparent, !last)
                         }
                     }
                 }
@@ -83,7 +86,7 @@ class RedBlackTree<K : Comparable<K>, V>(@Transient val key: K? = null, @Transie
                 direction = iter.key < key
 
                 // Update helpers
-                t = grandparent ?: t
+                helper = grandparent ?: helper
                 grandparent = parent
                 parent = iter
                 iter = iter.child(direction)
@@ -104,10 +107,10 @@ class RedBlackTree<K : Comparable<K>, V>(@Transient val key: K? = null, @Transie
         if (rootNode != null) {
             /*
               False tree root.
-              If someone knows how to do it
-              without ugly cast make a pull request please
+
              */
-            val head = initNode(key, "" as V)
+            val head = initNode(key, rootNode?.value
+                ?: throw IllegalStateException("Root of the tree cannot be null"))
             var iter: RBTNode<K, V> = head
             var parent: RBTNode<K, V>? = null
             var grandparent: RBTNode<K, V>?
@@ -150,26 +153,26 @@ class RedBlackTree<K : Comparable<K>, V>(@Transient val key: K? = null, @Transie
                         }
                         parent = parent.child(last)
                     } else if (!isRed(iter.child(!direction))) {
-                        val s = parent.child(!last)
+                        val sibling = parent.child(!last)
 
-                        if (s != null) {
-                            if (!isRed(s.child(!last)) && !isRed(s.child(last))) {
+                        if (sibling != null) {
+                            if (!isRed(sibling.child(!last)) && !isRed(sibling.child(last))) {
                                 /* Color flip */
                                 parent.color = RBTNode.Color.BLACK
-                                s.color = RBTNode.Color.RED
+                                sibling.color = RBTNode.Color.RED
                                 iter.color = RBTNode.Color.RED
                             } else {
-                                val dir2 = (grandparent?.right
+                                val direction2 = (grandparent?.right
                                     ?: throw IllegalStateException("Grandparent node cannot be null")) == parent
 
-                                if (isRed(s.child(last))) {
-                                    if (dir2) {
+                                if (isRed(sibling.child(last))) {
+                                    if (direction2) {
                                         grandparent.right = doubleRotate(parent, last)
                                     } else {
                                         grandparent.left = doubleRotate(parent, last)
                                     }
-                                } else if (isRed(s.child(!last))) {
-                                    if (dir2) {
+                                } else if (isRed(sibling.child(!last))) {
+                                    if (direction2) {
                                         grandparent.right = rotate(parent, last)
                                     } else {
                                         grandparent.left = rotate(parent, last)
@@ -177,9 +180,9 @@ class RedBlackTree<K : Comparable<K>, V>(@Transient val key: K? = null, @Transie
                                 }
                                 /* Ensure correct coloring */
                                 iter.color = RBTNode.Color.RED
-                                grandparent.child(dir2)?.color = RBTNode.Color.RED
-                                grandparent.child(dir2)?.left?.color = RBTNode.Color.BLACK
-                                grandparent.child(dir2)?.right?.color = RBTNode.Color.BLACK
+                                grandparent.child(direction2)?.color = RBTNode.Color.RED
+                                grandparent.child(direction2)?.left?.color = RBTNode.Color.BLACK
+                                grandparent.child(direction2)?.right?.color = RBTNode.Color.BLACK
                             }
                         }
                     }
@@ -207,14 +210,14 @@ class RedBlackTree<K : Comparable<K>, V>(@Transient val key: K? = null, @Transie
     }
 
     private fun rotate(node: RBTNode<K, V>, dir: Boolean): RBTNode<K, V> {
-        val save: RBTNode<K, V> = if (dir) {
+        val childNode: RBTNode<K, V> = if (dir) {
             rotateRight(node)
         } else {
             rotateLeft(node)
         }
         node.color = RBTNode.Color.RED
-        save.color = RBTNode.Color.BLACK
-        return save
+        childNode.color = RBTNode.Color.BLACK
+        return childNode
     }
 
     private fun doubleRotate(node: RBTNode<K, V>, dir: Boolean): RBTNode<K, V> {
@@ -225,8 +228,6 @@ class RedBlackTree<K : Comparable<K>, V>(@Transient val key: K? = null, @Transie
         }
         return rotate(node, dir)
     }
-
-    override fun initNode(key: K, value: V): RBTNode<K, V> = RBTNode(key, value)
 
     override fun rotateLeft(node: RBTNode<K, V>): RBTNode<K, V> {
         val right = node.right ?: throw IllegalStateException("Node's right child cannot be null")
