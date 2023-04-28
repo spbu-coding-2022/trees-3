@@ -129,7 +129,6 @@ class SQLController: Controller<BSTNode<Int, String>, BSTree<Int, String>>{
                 val rootNode = deserializeNodeDoubleKey(tree.rootNode)
                 val deserializedTree: BSTree<Int, String> = BSTree(rootNode?.key, rootNode?.value)
                 deserializedTree.rootNode = rootNode
-                deserializedTree.setName(tree.treeName)
                 return deserializedTree
             }
         }
