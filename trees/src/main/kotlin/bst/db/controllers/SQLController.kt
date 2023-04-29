@@ -141,3 +141,13 @@ class SQLController {
         return deserializeTree(deserializedTree)
     }
 }
+
+fun main() {
+    val controller = SQLController()
+    val tree = BSTree(1, "A")
+    tree.insert(2, "B")
+    tree.setName("asd")
+    controller.saveTreeToDB(tree)
+    val loadedTree = controller.getTree("asd")
+    loadedTree?.insert(3, "F")
+}
