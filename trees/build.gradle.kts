@@ -18,7 +18,7 @@ dependencies {
     // Use the JUnit 5 integration.
     testImplementation("org.junit.jupiter:junit-jupiter-engine:5.9.2")
 
-    implementation("io.github.microutils:kotlin-logging-jvm:2.0.11")
+    implementation("io.github.microutils:kotlin-logging-jvm:3.0.5")
 
     implementation("org.slf4j", "slf4j-simple", "2.0.0")
 
