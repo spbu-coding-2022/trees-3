@@ -12,4 +12,3 @@ object Nodes : IntIdTable("nodes") {
     val right = reference("right", Nodes).nullable()
     val tree = reference("tree", Trees, onDelete = ReferenceOption.CASCADE)
 }
-

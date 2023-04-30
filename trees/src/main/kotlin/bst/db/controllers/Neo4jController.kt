@@ -10,7 +10,7 @@ import bst.nodes.RBTNode.Color
 import org.neo4j.ogm.config.Configuration
 import org.neo4j.ogm.session.SessionFactory
 
-class Neo4jController: Controller<RBTNode<Int, String>, RedBlackTree<Int, String>> {
+class Neo4jController : Controller<RBTNode<Int, String>, RedBlackTree<Int, String>> {
     private val config = Configuration.Builder()
         .uri("bolt://localhost")
         .credentials("neo4j", "password")
@@ -56,7 +56,9 @@ class Neo4jController: Controller<RBTNode<Int, String>, RedBlackTree<Int, String
     private fun deserializeNode(node: SerializableNode?): RBTNode<Int, String>? {
         node ?: return null
         val rbtNode = RBTNode(
-            key = node.key.toInt(), value = node.value, color = deserializeMetadata(node.metadata)
+            key = node.key.toInt(),
+            value = node.value,
+            color = deserializeMetadata(node.metadata)
         )
         rbtNode.left = deserializeNode(node.leftNode)
         rbtNode.right = deserializeNode(node.rightNode)
@@ -82,12 +84,14 @@ class Neo4jController: Controller<RBTNode<Int, String>, RedBlackTree<Int, String
         val entityTree = tree.toSerializableTree(treeName).toTreeEntity()
         entityTree.treeName = treeName
         session.save(entityTree)
-        session.query("MATCH (n: BinaryNode) WHERE NOT (n)--() DELETE (n)", mapOf<String, String>())
+        session.query("MATCH (n: BinaryNode) WHERE NOT (n)--() DELETE (n)",
+            mapOf<String, String>())
     }
 
     override fun removeTree(treeName: String) {
         session.query(
-            "MATCH (n)-[r *0..]->(m) " + "WHERE n.treeName = \$treeName DETACH DELETE m", mapOf("treeName" to treeName)
+            "MATCH (n)-[r *0..]->(m) " + "WHERE n.treeName = \$treeName DETACH DELETE m",
+            mapOf("treeName" to treeName)
         )
     }
 

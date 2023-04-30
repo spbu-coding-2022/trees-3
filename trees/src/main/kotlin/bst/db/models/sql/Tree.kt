@@ -11,4 +11,3 @@ class Tree(id: EntityID<Int>) : IntEntity(id) {
     var rootNode by Node optionalReferencedOn Trees.rootNode
     override fun toString(): String = "Node(key = $name, rootNode=$rootNode)"
 }
-

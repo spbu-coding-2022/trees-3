@@ -7,7 +7,7 @@ import java.io.File
 import java.io.FileReader
 import java.io.FileWriter
 
-class JsonController: Controller<AVLNode<Int, String>, AVLTree<Int, String>> {
+class JsonController : Controller<AVLNode<Int, String>, AVLTree<Int, String>> {
     override fun saveTree(tree: AVLTree<Int, String>, treeName: String) {
         val gson = Gson()
         try {
