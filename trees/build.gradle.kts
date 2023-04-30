@@ -3,8 +3,7 @@ plugins {
     id("org.jetbrains.kotlin.jvm") version "1.8.10"
     id("jacoco")
     id("org.jetbrains.kotlin.plugin.noarg") version "1.8.20"
-    id ("org.jetbrains.kotlin.plugin.serialization") version "1.8.10"
-
+    id("org.jetbrains.kotlin.plugin.serialization") version "1.8.10"
 }
 
 repositories {
@@ -21,13 +20,11 @@ dependencies {
 
     implementation ("io.github.microutils:kotlin-logging-jvm:2.0.11")
 
-
     implementation("org.slf4j", "slf4j-simple", "2.0.0")
 
 
     implementation("org.neo4j:neo4j-ogm-core:4.0.5")
     runtimeOnly("org.neo4j:neo4j-ogm-bolt-driver:4.0.5")
-
 
     implementation("com.google.code.gson:gson:2.10.1")
 
@@ -40,8 +37,6 @@ dependencies {
 
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.5.0")
     implementation("org.postgresql:postgresql:42.5.4")
-
-
 }
 
 tasks.test {

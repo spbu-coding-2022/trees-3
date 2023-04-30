@@ -1,52 +1,61 @@
 package bst.db.controllers
+
 import bst.BSTree
+import bst.db.models.sql.Node
+import bst.db.models.sql.Nodes
+import bst.db.models.sql.Tree
+import bst.db.models.sql.Trees
 import bst.db.serializeClasses.SerializableNode
 import bst.db.serializeClasses.SerializableTree
 import bst.nodes.BSTNode
-import bst.db.models.Node
-import org.jetbrains.exposed.sql.*
-import bst.db.models.Trees
-import bst.db.models.Nodes
-import bst.db.models.Tree
+import org.jetbrains.exposed.sql.Database
+import org.jetbrains.exposed.sql.SchemaUtils
+import org.jetbrains.exposed.sql.StdOutSqlLogger
+import org.jetbrains.exposed.sql.addLogger
 import org.jetbrains.exposed.sql.transactions.transaction
 
-
-class SQLController {
+class SQLController : Controller<BSTNode<Int, String>, BSTree<Int, String>> {
     private fun connectDB() {
-        Database.connect("jdbc:postgresql://localhost:5432/test", driver = "org.postgresql.Driver",
-            user = "test", password = "test")
+        Database.connect(
+            "jdbc:postgresql://localhost:5432/test",
+            driver = "org.postgresql.Driver",
+            user = "test",
+            password = "test-test"
+        )
     }
 
-    fun deleteTree(treeName: String) {
+    override fun removeTree(treeName: String) {
         transaction {
-            val treeEntity =
-                Tree.find { (Trees.name eq treeName)}
-                    .firstOrNull()
+            val treeEntity = Tree.find { (Trees.name eq treeName) }.firstOrNull()
             treeEntity?.delete()
         }
     }
 
-    private fun serializeNode(node: BSTNode<*, *>?): SerializableNode?{
-        return if (node == null){
+    private fun serializeNode(node: BSTNode<Int, String>?): SerializableNode? {
+        return if (node == null) {
             null
-        } else{
-            val serializableNode = SerializableNode(key = node.key.toString(), value = node.value.toString(), leftNode = null, rightNode = null)
+        } else {
+            val serializableNode = SerializableNode(
+                key = node.key.toString(),
+                value = node.value,
+                leftNode = null,
+                rightNode = null
+            )
             serializableNode.rightNode = serializeNode(node.right)
             serializableNode.leftNode = serializeNode(node.left)
             serializableNode
         }
     }
 
-    private fun serializeTree(tree: BSTree<*, *>): SerializableTree? {
+    private fun serializeTree(tree: BSTree<Int, String>, treeName: String): SerializableTree? {
         return tree.rootNode?.let { serializeNode(it) }
-            ?.let { SerializableTree(treeName = tree.treeName, rootNode = it) }
+            ?.let { SerializableTree(treeName = treeName, rootNode = it) }
     }
 
-    private fun createTables(){
+    private fun createTables() {
         SchemaUtils.create(Trees)
         SchemaUtils.create(Nodes)
     }
-
 
     private fun SerializableNode.toNodeDao(treeDao: Tree): Node {
         return Node.new {
@@ -60,16 +69,15 @@ class SQLController {
         }
     }
 
-    fun saveTreeToDB(tree: BSTree<*, *>){
+    override fun saveTree(tree: BSTree<Int, String>, treeName: String) {
         connectDB()
-        deleteTree(tree.treeName)
-        val serializedTree = serializeTree(tree)
+        removeTree(treeName)
+        val serializedTree = serializeTree(tree, treeName)
         transaction {
             addLogger(StdOutSqlLogger)
             createTables()
             val daoTree = Tree.new {
-                if(serializedTree!=null)
-                    name = serializedTree.treeName
+                if (serializedTree != null) name = serializedTree.treeName
             }
             daoTree.rootNode = serializedTree?.rootNode?.toNodeDao(daoTree)
         }
@@ -83,14 +91,13 @@ class SQLController {
             this@getSerializedNode.y,
             null,
             this@getSerializedNode.left?.getSerializedNode(treeDao),
-            this@getSerializedNode.right?.getSerializedNode(treeDao),
+            this@getSerializedNode.right?.getSerializedNode(treeDao)
         )
-
     }
 
-    private fun findTree(treeName: String): SerializableTree?{
+    private fun findTree(treeName: String): SerializableTree? {
         connectDB()
-        val treeDAO = Tree.find{ Trees.name eq treeName}.firstOrNull() ?: return null
+        val treeDAO = Tree.find { Trees.name eq treeName }.firstOrNull() ?: return null
         return treeDAO.rootNode?.getSerializedNode(treeDAO)?.let {
             SerializableTree(
                 treeName,
@@ -107,12 +114,11 @@ class SQLController {
             false
         }
     }
-    
 
     private fun deserializeNodeDoubleKey(node: SerializableNode?): BSTNode<Int, String>? {
-        return if (node == null){
+        return if (node == null) {
             null
-        } else{
+        } else {
             val deserializableNode = BSTNode(key = node.key.toInt(), value = node.value)
             deserializableNode.right = deserializeNodeDoubleKey(node.rightNode)
             deserializableNode.left = deserializeNodeDoubleKey(node.leftNode)
@@ -120,49 +126,23 @@ class SQLController {
         }
     }
 
-    private fun deserializeTree(tree: SerializableTree?): BSTree<Int, String>?{
+    private fun deserializeTree(tree: SerializableTree?): BSTree<Int, String>? {
         if (tree != null) {
-             if (isNumeric(tree.rootNode!!.key)){
+            if (isNumeric(tree.rootNode!!.key)) {
                 val rootNode = deserializeNodeDoubleKey(tree.rootNode)
-                val deserializedTree:BSTree<Int,String> = BSTree(rootNode?.key, rootNode?.value)
+                val deserializedTree: BSTree<Int, String> = BSTree(rootNode?.key, rootNode?.value)
                 deserializedTree.rootNode = rootNode
-                deserializedTree.setName(tree.treeName)
-                 return deserializedTree
+                return deserializedTree
             }
         }
         return null
     }
 
-    fun getTree(treeName: String): BSTree<Int, String>? {
-        var  deserializedTree: SerializableTree? = null
+    override fun getTree(treeName: String): BSTree<Int, String>? {
+        var deserializedTree: SerializableTree? = null
         transaction {
             deserializedTree = findTree(treeName)
         }
         return deserializeTree(deserializedTree)
     }
-
-    fun getAllTrees(): List<String> {
-        val notes = mutableListOf<String>()
-        connectDB()
-        transaction {
-            Trees.selectAll().forEach {
-                val name = it[Trees.name]
-                notes.add(name)
-            }
-        }
-
-        return notes
-    }
-
-
-}
-
-fun main() {
-    val controller = SQLController()
-    val tree = BSTree(1, "A")
-    tree.insert(2, "B")
-    tree.setName("asd")
-    controller.saveTreeToDB(tree)
-    val loadedTree = controller.getTree("asd")
-    loadedTree?.insert(3, "F")
 }

@@ -1,9 +1,12 @@
-package bst.db.models
-import org.jetbrains.exposed.dao.*
+package bst.db.models.sql
+
+import org.jetbrains.exposed.dao.IntEntity
+import org.jetbrains.exposed.dao.IntEntityClass
 import org.jetbrains.exposed.dao.id.EntityID
 
-class Node(id: EntityID<Int>): IntEntity(id) {
-    companion object: IntEntityClass<Node>(Nodes)
+class Node(id: EntityID<Int>) : IntEntity(id) {
+    companion object : IntEntityClass<Node>(Nodes)
+
     var key by Nodes.key
     var value by Nodes.value
     var x by Nodes.x
@@ -12,9 +15,4 @@ class Node(id: EntityID<Int>): IntEntity(id) {
     var right by Node optionalReferencedOn Nodes.right
     var tree by Tree referencedOn Nodes.tree
     override fun toString(): String = "Node(key = $key, value=$value, x=$x, y=$y, left=$left, right=$right, tree=$tree)"
-
 }
-
-//class NodeSerialize(){
-//
-//}

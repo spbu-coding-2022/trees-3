@@ -2,18 +2,8 @@ package bst
 
 import bst.nodes.BSTNode
 import bst.nodes.BinaryNode
-import org.neo4j.ogm.annotation.GeneratedValue
-import org.neo4j.ogm.annotation.Id
-import org.neo4j.ogm.annotation.Labels
-import org.neo4j.ogm.annotation.NodeEntity
 
-@NodeEntity
-
-abstract class AbstractBST<K: Comparable<K>, V, Self: BinaryNode<K, V, Self>> : Tree<K, V> {
-    @Id
-    @GeneratedValue
-    val id: Long? = null
-    var treeName: String = ""
+abstract class AbstractBST<K : Comparable<K>, V, Self : BinaryNode<K, V, Self>> : Tree<K, V> {
 
     internal var rootNode: Self? = null
 
@@ -32,6 +22,7 @@ abstract class AbstractBST<K: Comparable<K>, V, Self: BinaryNode<K, V, Self>> : 
     override fun insert(key: K, value: V) {
         rootNode = insertNode(rootNode, key, value)
     }
+
     protected open fun insertNode(node: Self?, key: K, value: V): Self {
         if (node == null) return initNode(key, value)
         if (key < node.key) {
@@ -44,10 +35,10 @@ abstract class AbstractBST<K: Comparable<K>, V, Self: BinaryNode<K, V, Self>> : 
         return node
     }
 
-
     override fun remove(key: K) {
         rootNode = removeNode(rootNode, key)
     }
+
     protected open fun removeNode(node: Self?, key: K): Self? {
         if (node == null) return null
         if (key < node.key) {
@@ -90,4 +81,3 @@ abstract class AbstractBST<K: Comparable<K>, V, Self: BinaryNode<K, V, Self>> : 
         else -> findMax(node.right)
     }
 }
-

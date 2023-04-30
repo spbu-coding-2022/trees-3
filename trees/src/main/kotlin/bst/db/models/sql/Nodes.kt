@@ -1,4 +1,5 @@
-package bst.db.models
+package bst.db.models.sql
+
 import org.jetbrains.exposed.dao.id.IntIdTable
 import org.jetbrains.exposed.sql.ReferenceOption
 
@@ -11,4 +12,3 @@ object Nodes : IntIdTable("nodes") {
     val right = reference("right", Nodes).nullable()
     val tree = reference("tree", Trees, onDelete = ReferenceOption.CASCADE)
 }
-

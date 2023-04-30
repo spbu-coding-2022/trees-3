@@ -28,9 +28,11 @@ class AVLTree<K : Comparable<K>, V>(@Transient val key: K? = null, @Transient va
     private fun getHeight(node: AVLNode<K, V>?): Int {
         return node?.height ?: -1
     }
+
     private fun updateHeight(node: AVLNode<K, V>) {
         node.height = max(getHeight(node.left), getHeight(node.right)) + 1
     }
+
     private fun getBalanceFactor(node: AVLNode<K, V>?): Int = when (node) {
         null -> 0
         else -> getHeight(node.right) - getHeight(node.left)
@@ -44,12 +46,14 @@ class AVLTree<K : Comparable<K>, V>(@Transient val key: K? = null, @Transient va
                 }
                 return rotateRight(node)
             }
+
             2 -> {
                 if (getBalanceFactor(node.right) == -1) {
                     node.right = node.right?.let { rotateRight(it) }
                 }
                 return rotateLeft(node)
             }
+
             else -> node
         }
     }
@@ -66,8 +70,8 @@ class AVLTree<K : Comparable<K>, V>(@Transient val key: K? = null, @Transient va
             } else if (node.right == null) {
                 return node.left
             } else {
-                val tmp: AVLNode<K, V> = findMax(node.left) ?:
-                    throw IllegalStateException("Left subtree must contain elements")
+                val tmp: AVLNode<K, V> =
+                    findMax(node.left) ?: throw IllegalStateException("Left subtree must contain elements")
                 node.key = tmp.key
                 node.value = tmp.value
                 node.left = removeNode(node.left, tmp.key)
@@ -86,6 +90,7 @@ class AVLTree<K : Comparable<K>, V>(@Transient val key: K? = null, @Transient va
         updateHeight(left)
         return left
     }
+
     override fun rotateLeft(node: AVLNode<K, V>): AVLNode<K, V> {
         val right = node.right ?: throw IllegalStateException("Node's right child cannot be null")
         node.right = right.left
