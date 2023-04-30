@@ -1,10 +1,12 @@
 package app.view.treeView
+
 import tornadofx.*
 import app.controller.BSTController
 import bst.BSTree
 import javafx.beans.property.SimpleStringProperty
 import javafx.scene.layout.Pane
 import javafx.scene.control.Alert
+
 
 class BinarySearchTreeView : View() {
     private val controller: BSTController by inject()
@@ -13,8 +15,8 @@ class BinarySearchTreeView : View() {
     private val key = SimpleStringProperty()
     private val value = SimpleStringProperty()
     private var trees = controller.getTreesList()
-    var selectedItem: String? = ""
-
+    private var selectedItem: String? = ""
+    private val treeName = SimpleStringProperty()
     override val root = vbox {
         hbox {
             val availableTrees = combobox<String> {
@@ -45,13 +47,13 @@ class BinarySearchTreeView : View() {
                     println("Item deleted: $selectedItem")
                 }
             }
+
             button("Clear") {
                 action {
                     controller.clearTree(tree, treePane)
                 }
             }
             form {
-
                 fieldset {
                     field("Key input") {
                         textfield(key)
@@ -62,13 +64,28 @@ class BinarySearchTreeView : View() {
 
                     button("Add Node") {
                         action {
-                            if ( key.value != null && value.value != null && controller.isNumeric(key.value)){
-                                    controller.insertNode(tree, treePane, key.value.toInt(), value.value)
-                            } else{
+                            if (key.value != null && value.value != null && controller.isNumeric(key.value)) {
+                                controller.insertNode(tree, treePane, key.value.toInt(), value.value)
+                            } else {
                                 alert(type = Alert.AlertType.ERROR, header = "Insertion Error")
                             }
                             key.value = ""
                             value.value = ""
+                        }
+
+                    }
+                    field("Input tree name") {
+                        textfield(treeName)
+                    }
+                    button("Save tree") {
+                        action {
+                            if (tree.getRoot() != null) {
+                                tree.treeName = treeName.value
+                                controller.saveTree(tree)
+                                if (!availableTrees.items.contains(treeName.value)) {
+                                    availableTrees.items.add(treeName.value)
+                                }
+                            }
                         }
                     }
                 }

@@ -1,4 +1,5 @@
 package app.controller
+
 import bst.BSTree
 import bst.nodes.BSTNode
 import javafx.scene.layout.Pane
@@ -12,7 +13,7 @@ import bst.db.controllers.SQLController
 import javafx.collections.FXCollections.observableArrayList
 import javafx.collections.ObservableList
 
-class BSTController: Controller(){
+class BSTController : Controller() {
     fun isNumeric(s: String): Boolean {
         return try {
             s.toInt()
@@ -21,18 +22,20 @@ class BSTController: Controller(){
             false
         }
     }
-    fun insertNode(tree:BSTree<Int, String>, treePane: Pane, key: Int, value:String){
+
+    fun insertNode(tree: BSTree<Int, String>, treePane: Pane, key: Int, value: String) {
         tree.insert(key, value)
         drawTree(tree, treePane)
     }
-    fun clearTree(tree:BSTree<Int, String>, treePane: Pane) {
+
+    fun clearTree(tree: BSTree<Int, String>, treePane: Pane) {
         val controller = SQLController()
         tree.clear()
         treePane.children.clear()
     }
 
     //make here not null check
-    fun drawTree(tree:BSTree<Int, String>, treePane: Pane) {
+    fun drawTree(tree: BSTree<Int, String>, treePane: Pane) {
         treePane.children.clear()
         val root = tree.getRoot()
         if (root != null) {
@@ -50,7 +53,7 @@ class BSTController: Controller(){
         val nodeLabel = Label(node.key.toString())
         nodeLabel.layoutX = circle.centerX - (circle.radius / 3)
         nodeLabel.layoutY = circle.centerY - (circle.radius / 3)
-        treePane.children.addAll(circle,nodeLabel )
+        treePane.children.addAll(circle, nodeLabel)
 
         if (node.left != null) {
             val leftX = x - offsetX
@@ -65,27 +68,34 @@ class BSTController: Controller(){
             val rightY = y + 50
             val rightLine = Line(x, y + circleRadius, rightX, rightY - circleRadius)
             treePane.children.add(rightLine)
-            drawNode(node.right!!,treePane,  rightX, rightY, offsetX / 2.0)
+            drawNode(node.right!!, treePane, rightX, rightY, offsetX / 2.0)
         }
     }
+
     fun getTreesList(): ObservableList<String>? {
         val controller = SQLController()
         val treeNames = controller.getAllTrees()
         val values = observableArrayList<String>()
-        treeNames.forEach{
+        treeNames.forEach {
             values.add(it)
         }
         return values
     }
-    fun getTreeFromDB(name: String): BSTree<Int, String>?{
+
+    fun getTreeFromDB(name: String): BSTree<Int, String>? {
         val controller = SQLController()
         val tree = controller.getTree(name)
         return tree
     }
+
     fun deleteTreeFromDB(name: String) {
-        val controller = SQLController().run {
+        SQLController().run {
             deleteTree(name)
         }
+    }
+    fun saveTree(tree: BSTree<Int, String>) {
+        val controller = SQLController()
+        controller.saveTreeToDB(tree)
     }
 }
 
