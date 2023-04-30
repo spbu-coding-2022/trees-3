@@ -17,7 +17,7 @@ class SQLController {
             user = "test", password = "test")
     }
 
-    private fun deleteTree(treeName: String) {
+    fun deleteTree(treeName: String) {
         transaction {
             val treeEntity =
                 Tree.find { (Trees.name eq treeName)}
