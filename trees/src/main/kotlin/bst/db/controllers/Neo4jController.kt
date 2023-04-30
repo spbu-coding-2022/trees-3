@@ -18,8 +18,6 @@ class Neo4jController: Controller<RBTNode<Int, String>, RedBlackTree<Int, String
     private val sessionFactory = SessionFactory(config, "bst")
     private val session = sessionFactory.openSession()
 
-
-
     private fun RBTNode<*, *>?.toSerializableNode(): SerializableNode? {
         if (this == null) {
             return null
@@ -104,6 +102,11 @@ class Neo4jController: Controller<RBTNode<Int, String>, RedBlackTree<Int, String
             "MATCH (n)-[r *1..]-(m) " + "WHERE n.treeName = \$treeName RETURN n, r, m",
             mapOf("treeName" to treeName)
         ) ?: null
+    }
+
+    fun close() {
+        session.clear()
+        sessionFactory.close()
     }
 
     fun getNames() = session.query("MATCH (n: TreeEntity) RETURN n.treeName", mapOf<String, String>())
