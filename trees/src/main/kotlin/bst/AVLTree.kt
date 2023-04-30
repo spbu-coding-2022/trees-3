@@ -11,9 +11,7 @@ class AVLTree<K : Comparable<K>, V>(@Transient val key: K? = null, @Transient va
             rootNode = initNode(key, value)
         }
     }
-    fun setName(treeName: String){
-        this.treeName = treeName
-    }
+
     override fun insertNode(node: AVLNode<K, V>?, key: K, value: V): AVLNode<K, V> {
         if (node == null) return initNode(key, value)
         if (key < node.key) {

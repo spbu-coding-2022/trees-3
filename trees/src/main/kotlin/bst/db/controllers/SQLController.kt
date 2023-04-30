@@ -14,7 +14,7 @@ import org.jetbrains.exposed.sql.transactions.transaction
 class SQLController {
     private fun connectDB() {
         Database.connect("jdbc:postgresql://localhost:5432/test", driver = "org.postgresql.Driver",
-            user = "test", password = "test")
+            user = "test", password = "test-test")
     }
 
     fun deleteTree(treeName: String) {

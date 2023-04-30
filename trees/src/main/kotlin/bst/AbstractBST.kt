@@ -1,5 +1,6 @@
 package bst
 
+import bst.nodes.BSTNode
 import bst.nodes.BinaryNode
 import org.neo4j.ogm.annotation.GeneratedValue
 import org.neo4j.ogm.annotation.Id
@@ -16,7 +17,16 @@ abstract class AbstractBST<K: Comparable<K>, V, Self: BinaryNode<K, V, Self>> : 
 
     internal var rootNode: Self? = null
 
-    // factory method
+    fun setName(treeName: String){
+        this.treeName = treeName
+    }
+
+    fun getRoot(): Self? = this.rootNode
+
+    fun clear() {
+        this.rootNode = null
+    }
+
     protected abstract fun initNode(key: K, value: V): Self
 
     override fun insert(key: K, value: V) {

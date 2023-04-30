@@ -9,9 +9,6 @@ class RedBlackTree<K : Comparable<K>, V>(@Transient val key: K? = null, @Transie
         }
     }
 
-    fun setName(treeName: String){
-        this.treeName = treeName
-    }
     private fun isRed(node: RBTNode<K, V>?): Boolean {
         return node != null && node.color == RBTNode.Color.RED
     }

@@ -11,10 +11,6 @@ import javafx.scene.control.Label
 import bst.db.controllers.SQLController
 import javafx.collections.FXCollections.observableArrayList
 import javafx.collections.ObservableList
-import javafx.scene.control.ListCell
-import javafx.scene.input.MouseButton
-import tornadofx.View
-import tornadofx.listview
 
 class BSTController: Controller(){
     fun isNumeric(s: String): Boolean {
@@ -31,7 +27,6 @@ class BSTController: Controller(){
     }
     fun clearTree(tree:BSTree<Int, String>, treePane: Pane) {
         val controller = SQLController()
-//        controller.deleteTree(tree.treeName)
         tree.clear()
         treePane.children.clear()
     }
@@ -86,6 +81,11 @@ class BSTController: Controller(){
         val controller = SQLController()
         val tree = controller.getTree(name)
         return tree
+    }
+    fun deleteTreeFromDB(name: String) {
+        val controller = SQLController().run {
+            deleteTree(name)
+        }
     }
 }
 
