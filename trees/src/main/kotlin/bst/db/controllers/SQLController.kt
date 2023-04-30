@@ -5,17 +5,22 @@ import bst.db.serializeClasses.SerializableNode
 import bst.db.serializeClasses.SerializableTree
 import bst.nodes.BSTNode
 import bst.db.models.sql.Node
-import org.jetbrains.exposed.sql.*
 import bst.db.models.sql.Trees
 import bst.db.models.sql.Nodes
 import bst.db.models.sql.Tree
+import org.jetbrains.exposed.sql.Database
+import org.jetbrains.exposed.sql.SchemaUtils
+import org.jetbrains.exposed.sql.StdOutSqlLogger
+import org.jetbrains.exposed.sql.addLogger
 import org.jetbrains.exposed.sql.transactions.transaction
 
-
-class SQLController: Controller<BSTNode<Int, String>, BSTree<Int, String>>{
+class SQLController : Controller<BSTNode<Int, String>, BSTree<Int, String>> {
     private fun connectDB() {
         Database.connect(
-            "jdbc:postgresql://localhost:5432/test", driver = "org.postgresql.Driver", user = "test", password = "test"
+            "jdbc:postgresql://localhost:5432/test",
+            driver = "org.postgresql.Driver",
+            user = "test",
+            password = "test-test"
         )
     }
 
@@ -52,7 +57,6 @@ class SQLController: Controller<BSTNode<Int, String>, BSTree<Int, String>>{
         SchemaUtils.create(Nodes)
     }
 
-
     private fun SerializableNode.toNodeDao(treeDao: Tree): Node {
         return Node.new {
             key = this@toNodeDao.key
@@ -87,9 +91,8 @@ class SQLController: Controller<BSTNode<Int, String>, BSTree<Int, String>>{
             this@getSerializedNode.y,
             null,
             this@getSerializedNode.left?.getSerializedNode(treeDao),
-            this@getSerializedNode.right?.getSerializedNode(treeDao),
+            this@getSerializedNode.right?.getSerializedNode(treeDao)
         )
-
     }
 
     private fun findTree(treeName: String): SerializableTree? {
@@ -97,7 +100,8 @@ class SQLController: Controller<BSTNode<Int, String>, BSTree<Int, String>>{
         val treeDAO = Tree.find { Trees.name eq treeName }.firstOrNull() ?: return null
         return treeDAO.rootNode?.getSerializedNode(treeDAO)?.let {
             SerializableTree(
-                treeName, it
+                treeName,
+                it
             )
         }
     }
@@ -110,7 +114,6 @@ class SQLController: Controller<BSTNode<Int, String>, BSTree<Int, String>>{
             false
         }
     }
-
 
     private fun deserializeNodeDoubleKey(node: SerializableNode?): BSTNode<Int, String>? {
         return if (node == null) {

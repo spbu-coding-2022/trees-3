@@ -25,7 +25,6 @@ abstract class AbstractBST<K : Comparable<K>, V, Self : BinaryNode<K, V, Self>> 
         return node
     }
 
-
     override fun remove(key: K) {
         rootNode = removeNode(rootNode, key)
     }
@@ -72,4 +71,3 @@ abstract class AbstractBST<K : Comparable<K>, V, Self : BinaryNode<K, V, Self>> 
         else -> findMax(node.right)
     }
 }
-

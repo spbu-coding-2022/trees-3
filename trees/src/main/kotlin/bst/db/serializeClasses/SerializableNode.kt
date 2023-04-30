@@ -10,5 +10,5 @@ class SerializableNode(
     var y: Double = 0.0,
     var metadata: String? = null,
     var leftNode: SerializableNode? = null,
-    var rightNode: SerializableNode? = null,
+    var rightNode: SerializableNode? = null
 )

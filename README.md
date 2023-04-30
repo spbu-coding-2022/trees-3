@@ -1,4 +1,4 @@
-# Binary search trees library.
+# Binary search trees library
 > An open source library written in Kotlin to work with data structures such as AVL tree, red-black tree, and binary search tree.
 ## 🖍 Used technology
 ![Kotlin](https://img.shields.io/badge/-Kotlin-61DAFB?logo=kotlin)
@@ -13,11 +13,11 @@ To build the library run
 ./gradlew build
 ```
 To run PostgreSQL with docker:
-```
+```sh
 ./start-db.sh
 ```
 or
-```
+```sh
 ./start-db.bat
 ```
 
@@ -32,7 +32,7 @@ For example:
     tree.insert(28, "Alice")
     tree.insert(4, "Bob")
 ```
-Constructor takes two arguments: `key` and `value`, thus instantiating a root node (you can delete it, 
+Constructor takes two arguments: `key` and `value`, thus instantiating a root node (you can delete it,
 but you cannot create an empty tree).
 `insert` method also takes same arguments and adds a node with specified `key` and `value` properties to the tree.
 Method `setName` allows you to set the name of a tree.
@@ -47,7 +47,7 @@ Find or remove element from tree:
 AVL and red-black trees implement the same methods.
 
 ## Storing binary search trees
-AVL tree can be saved to and loaded from JSON file. 
+AVL tree can be saved to and loaded from JSON file.
 For example:
 ```kotlin
     val tree = AVLTree(1, "apple")

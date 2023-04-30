@@ -7,7 +7,7 @@ import org.neo4j.ogm.annotation.NodeEntity
 @NodeEntity
 class TreeEntity(
     var treeName: String = "",
-    var rootNode: TreeNodeEntity? = null,
+    var rootNode: TreeNodeEntity? = null
 ) {
     @Id
     @GeneratedValue
