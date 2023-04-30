@@ -1,13 +1,13 @@
 package bst.db.controllers
 
 import bst.BSTree
+import bst.db.models.sql.Node
+import bst.db.models.sql.Nodes
+import bst.db.models.sql.Tree
+import bst.db.models.sql.Trees
 import bst.db.serializeClasses.SerializableNode
 import bst.db.serializeClasses.SerializableTree
 import bst.nodes.BSTNode
-import bst.db.models.sql.Node
-import bst.db.models.sql.Trees
-import bst.db.models.sql.Nodes
-import bst.db.models.sql.Tree
 import org.jetbrains.exposed.sql.Database
 import org.jetbrains.exposed.sql.SchemaUtils
 import org.jetbrains.exposed.sql.StdOutSqlLogger
