@@ -140,6 +140,21 @@ class SQLController {
         }
         return deserializeTree(deserializedTree)
     }
+
+    fun getAllTrees(): List<String> {
+        val notes = mutableListOf<String>()
+        connectDB()
+        transaction {
+            Trees.selectAll().forEach {
+                val name = it[Trees.name]
+                notes.add(name)
+            }
+        }
+
+        return notes
+    }
+
+
 }
 
 fun main() {

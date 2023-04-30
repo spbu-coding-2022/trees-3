@@ -8,6 +8,10 @@ import javafx.scene.shape.Line
 
 import tornadofx.Controller
 import javafx.scene.control.Label
+import bst.db.controllers.SQLController
+import javafx.beans.property.ReadOnlyListProperty
+import javafx.collections.FXCollections.observableArrayList
+import javafx.collections.ObservableList
 
 class BSTController: Controller(){
     fun isNumeric(s: String): Boolean {
@@ -30,8 +34,9 @@ class BSTController: Controller(){
     //make here not null check
     private fun drawTree(tree:BSTree<Int, String>, treePane: Pane) {
         treePane.children.clear()
-        if (tree.getRoot() != null) {
-            drawNode(tree.getRoot()!!, treePane, treePane.width / 2.0, 50.0, treePane.width / 4.0)
+        val root = tree.getRoot()
+        if (root != null) {
+            drawNode(root, treePane, treePane.width / 2.0, 50.0, treePane.width / 4.0)
         }
     }
 
@@ -62,6 +67,15 @@ class BSTController: Controller(){
             treePane.children.add(rightLine)
             drawNode(node.right!!,treePane,  rightX, rightY, offsetX / 2.0)
         }
+    }
+    fun getTreesList(): ObservableList<String>? {
+        val controller = SQLController()
+        val treeNames = controller.getAllTrees()
+        val values = observableArrayList<String>()
+        treeNames.forEach{
+            values.add(it)
+        }
+        return values
     }
 }
 

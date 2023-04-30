@@ -6,6 +6,7 @@ import bst.BSTree
 import javafx.beans.property.SimpleStringProperty
 import javafx.scene.layout.Pane
 import javafx.stage.StageStyle
+//import tornadofx.Stylesheet.Companion.selected
 
 class BinarySearchTreeView : View() {
     private val controller: BSTController by inject()
@@ -13,12 +14,19 @@ class BinarySearchTreeView : View() {
     private val treePane = Pane()
     val key = SimpleStringProperty()
     val value = SimpleStringProperty()
+    val trees = controller.getTreesList()
+    val selected = stringProperty("")
     override val root = vbox {
         hbox {
             button("Clear") {
                 action { controller.clearTree(tree, treePane) }
             }
+            listview(trees).onUserSelect{
+                selected.set(it)
+                log.info { selected.value }
+            }
             form {
+
                 fieldset {
                     field("Key input") {
                         textfield(key)
@@ -29,8 +37,13 @@ class BinarySearchTreeView : View() {
 
                     button("Add Node") {
                         action {
-                            if (controller.isNumeric(key.value)){
-                                controller.insertNode(tree, treePane, key.value.toInt(), value.value)
+                            if ( key.value != null && value.value != null){
+                                if (controller.isNumeric(key.value)){
+                                    controller.insertNode(tree, treePane, key.value.toInt(), value.value)
+                                }
+                                else{
+                                    find<AdditionErrorFragment>().openModal(stageStyle = StageStyle.UTILITY)
+                                }
                             }
                             else{
                                 find<AdditionErrorFragment>().openModal(stageStyle = StageStyle.UTILITY)
