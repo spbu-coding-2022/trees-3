@@ -84,8 +84,10 @@ class Neo4jController : Controller<RBTNode<Int, String>, RedBlackTree<Int, Strin
         val entityTree = tree.toSerializableTree(treeName).toTreeEntity()
         entityTree.treeName = treeName
         session.save(entityTree)
-        session.query("MATCH (n: BinaryNode) WHERE NOT (n)--() DELETE (n)",
-            mapOf<String, String>())
+        session.query(
+            "MATCH (n: BinaryNode) WHERE NOT (n)--() DELETE (n)",
+            mapOf<String, String>()
+        )
     }
 
     override fun removeTree(treeName: String) {

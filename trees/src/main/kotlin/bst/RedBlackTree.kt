@@ -107,7 +107,8 @@ class RedBlackTree<K : Comparable<K>, V>(@Transient val key: K? = null, @Transie
             val head = initNode(
                 key,
                 rootNode?.value
-                ?: throw IllegalStateException("Root of the tree cannot be null"))
+                    ?: throw IllegalStateException("Root of the tree cannot be null")
+            )
             var iter: RBTNode<K, V> = head
             var parent: RBTNode<K, V>? = null
             var grandparent: RBTNode<K, V>?
@@ -161,7 +162,7 @@ class RedBlackTree<K : Comparable<K>, V>(@Transient val key: K? = null, @Transie
                             } else {
                                 val direction2 = (
                                     grandparent?.right
-                                    ?: throw IllegalStateException("Grandparent node cannot be null")
+                                        ?: throw IllegalStateException("Grandparent node cannot be null")
                                     ) == parent
 
                                 if (isRed(sibling.child(last))) {
