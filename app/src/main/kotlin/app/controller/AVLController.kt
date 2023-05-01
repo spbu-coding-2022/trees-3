@@ -16,7 +16,7 @@ import javafx.scene.text.TextBoundsType
 import tornadofx.Controller
 import kotlin.math.min
 
-class AVLController: Controller() {
+class AVLController : Controller() {
     fun isNumeric(s: String): Boolean {
         return try {
             s.toInt()
@@ -36,7 +36,7 @@ class AVLController: Controller() {
         treePane.children.clear()
     }
 
-    //make here not null check
+    // make here not null check
     fun drawTree(tree: AVLTree<Int, String>, treePane: Pane) {
         treePane.children.clear()
         val root = tree.getRoot()
@@ -66,7 +66,6 @@ class AVLController: Controller() {
 
         treePane.children.add(nodeStackPane)
 
-
         if (node.left != null) {
             val leftX = x - offsetX
             val leftY = y + 50
@@ -95,8 +94,7 @@ class AVLController: Controller() {
     }
     fun getTreeFromJson(name: String): AVLTree<Int, String>? {
         val controller = JsonController()
-        val tree = controller.getTree(name)
-        return tree
+        return controller.getTree(name)
     }
 
     fun deleteTreeFromDB(name: String) {
@@ -108,7 +106,7 @@ class AVLController: Controller() {
         val controller = JsonController()
         controller.saveTree(tree, treeName)
     }
-    fun deleteNode(value: Int, tree: AVLTree<Int, String>, treePane: Pane){
+    fun deleteNode(value: Int, tree: AVLTree<Int, String>, treePane: Pane) {
         tree.remove(value)
         drawTree(tree, treePane)
     }

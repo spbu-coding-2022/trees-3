@@ -1,8 +1,8 @@
 package app.controller
 
 import bst.RedBlackTree
-import bst.nodes.RBTNode
 import bst.db.controllers.Neo4jController
+import bst.nodes.RBTNode
 import javafx.collections.FXCollections
 import javafx.collections.ObservableList
 import javafx.scene.control.Tooltip
@@ -16,7 +16,7 @@ import javafx.scene.text.TextBoundsType
 import tornadofx.Controller
 import kotlin.math.min
 
-class RBTController: Controller() {
+class RBTController : Controller() {
     fun isNumeric(s: String): Boolean {
         return try {
             s.toInt()
@@ -36,7 +36,7 @@ class RBTController: Controller() {
         treePane.children.clear()
     }
 
-    //make here not null check
+    // make here not null check
     fun drawTree(tree: RedBlackTree<Int, String>, treePane: Pane) {
         treePane.children.clear()
         val root = tree.getRoot()
@@ -106,7 +106,7 @@ class RBTController: Controller() {
         val controller = Neo4jController()
         controller.saveTree(tree, treeName)
     }
-    fun deleteNode(value: Int, tree: RedBlackTree<Int, String>, treePane: Pane){
+    fun deleteNode(value: Int, tree: RedBlackTree<Int, String>, treePane: Pane) {
         tree.remove(value)
         drawTree(tree, treePane)
     }

@@ -1,20 +1,19 @@
 package app.controller
 
 import bst.BSTree
-import bst.nodes.BSTNode
-import javafx.scene.layout.Pane
-import javafx.scene.paint.Color
-import javafx.scene.shape.Circle
-import javafx.scene.shape.Line
-
-import tornadofx.Controller
 import bst.db.controllers.SQLController
+import bst.nodes.BSTNode
 import javafx.collections.FXCollections.observableArrayList
 import javafx.collections.ObservableList
 import javafx.scene.control.Tooltip
+import javafx.scene.layout.Pane
 import javafx.scene.layout.StackPane
+import javafx.scene.paint.Color
+import javafx.scene.shape.Circle
+import javafx.scene.shape.Line
 import javafx.scene.text.Text
 import javafx.scene.text.TextBoundsType
+import tornadofx.Controller
 import kotlin.math.min
 
 class BSTController : Controller() {
@@ -37,7 +36,7 @@ class BSTController : Controller() {
         treePane.children.clear()
     }
 
-    //make here not null check
+    // make here not null check
     fun drawTree(tree: BSTree<Int, String>, treePane: Pane) {
         treePane.children.clear()
         val root = tree.getRoot()
@@ -109,7 +108,7 @@ class BSTController : Controller() {
         val controller = SQLController()
         controller.saveTree(tree, treeName)
     }
-    fun deleteNode(value: Int, tree: BSTree<Int, String>, treePane: Pane){
+    fun deleteNode(value: Int, tree: BSTree<Int, String>, treePane: Pane) {
         tree.remove(value)
         drawTree(tree, treePane)
     }

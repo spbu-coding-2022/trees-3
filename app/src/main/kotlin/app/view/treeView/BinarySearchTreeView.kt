@@ -1,12 +1,11 @@
 package app.view.treeView
 
-import tornadofx.*
 import app.controller.BSTController
 import bst.BSTree
 import javafx.beans.property.SimpleStringProperty
-import javafx.scene.layout.Pane
 import javafx.scene.control.Alert
-
+import javafx.scene.layout.Pane
+import tornadofx.*
 
 class BinarySearchTreeView : View() {
     private val controller: BSTController by inject()
@@ -17,7 +16,7 @@ class BinarySearchTreeView : View() {
     private var trees = controller.getTreesList()
     private var selectedItem: String? = ""
     private val treeName = SimpleStringProperty()
-    private val valueFotDeletion = SimpleStringProperty()
+    private val valueForDeletion = SimpleStringProperty()
 
     init {
         // Add listeners to the width and height properties of the scene
@@ -73,14 +72,14 @@ class BinarySearchTreeView : View() {
             }
             form {
                 fieldset {
-                    field("Key input") {
+                    field("Key") {
                         textfield(key)
                     }
-                    field("Value input") {
+                    field("Value") {
                         textfield(value)
                     }
 
-                    button("Add Node") {
+                    button("Add") {
                         action {
                             if (key.value != null && value.value != null && controller.isNumeric(key.value)) {
                                 controller.insertNode(tree, treePane, key.value.toInt(), value.value)
@@ -91,15 +90,14 @@ class BinarySearchTreeView : View() {
                             value.value = ""
                         }
                     }
-                    field("Key input"){
-                        textfield(valueFotDeletion)
+                    field("Key") {
+                        textfield(valueForDeletion)
                     }
-                    button("Delete node"){
+                    button("Delete") {
                         action {
-                            if (controller.isNumeric(valueFotDeletion.value)){
-                                controller.deleteNode(valueFotDeletion.value.toInt(), tree, treePane)
-                            }
-                            else{
+                            if (controller.isNumeric(valueForDeletion.value)) {
+                                controller.deleteNode(valueForDeletion.value.toInt(), tree, treePane)
+                            } else {
                                 alert(type = Alert.AlertType.ERROR, header = "Deletion Error")
                             }
                         }
@@ -111,15 +109,13 @@ class BinarySearchTreeView : View() {
                     button("Save tree") {
                         action {
                             if (tree.getRoot() != null) {
-//                                tree.treeName = treeName.value
+                                //                                tree.treeName = treeName.value
                                 controller.saveTree(tree, treeName.value)
                                 if (!availableTrees.items.contains(treeName.value)) {
                                     availableTrees.items.add(treeName.value)
                                 }
-                            }
-                            else{
+                            } else {
                                 alert(type = Alert.AlertType.ERROR, header = "Can not save tree with empty root")
-
                             }
                         }
                     }

@@ -1,13 +1,11 @@
 package app.view.treeView
 
 import app.controller.RBTController
-import tornadofx.*
 import bst.RedBlackTree
-import bst.db.controllers.Neo4jController
 import javafx.beans.property.SimpleStringProperty
-import javafx.scene.layout.Pane
 import javafx.scene.control.Alert
-
+import javafx.scene.layout.Pane
+import tornadofx.*
 
 class RedBlackTreeView : View() {
     private val controller: RBTController by inject()
@@ -18,7 +16,7 @@ class RedBlackTreeView : View() {
     private var trees = controller.getTreesList()
     private var selectedItem: String? = ""
     private val treeName = SimpleStringProperty()
-    private val valueFotDeletion = SimpleStringProperty()
+    private val valueForDeletion = SimpleStringProperty()
 
     init {
         // Add listeners to the width and height properties of the scene
@@ -74,14 +72,14 @@ class RedBlackTreeView : View() {
             }
             form {
                 fieldset {
-                    field("Key input") {
+                    field("Key") {
                         textfield(key)
                     }
-                    field("Value input") {
+                    field("Value") {
                         textfield(value)
                     }
 
-                    button("Add Node") {
+                    button("Add") {
                         action {
                             if (key.value != null && value.value != null && controller.isNumeric(key.value)) {
                                 controller.insertNode(tree, treePane, key.value.toInt(), value.value)
@@ -92,15 +90,14 @@ class RedBlackTreeView : View() {
                             value.value = ""
                         }
                     }
-                    field("Value input"){
-                        textfield(valueFotDeletion)
+                    field("Value") {
+                        textfield(valueForDeletion)
                     }
-                    button("Delete node"){
+                    button("Delete") {
                         action {
-                            if (controller.isNumeric(valueFotDeletion.value)){
-                                controller.deleteNode(valueFotDeletion.value.toInt(), tree, treePane)
-                            }
-                            else{
+                            if (controller.isNumeric(valueForDeletion.value)) {
+                                controller.deleteNode(valueForDeletion.value.toInt(), tree, treePane)
+                            } else {
                                 alert(type = Alert.AlertType.ERROR, header = "Deletion Error")
                             }
                         }
@@ -117,8 +114,7 @@ class RedBlackTreeView : View() {
                                 if (!availableTrees.items.contains(treeName.value)) {
                                     availableTrees.items.add(treeName.value)
                                 }
-                            }
-                            else{
+                            } else {
                                 alert(type = Alert.AlertType.ERROR, header = "Can not save tree with empty root")
                             }
                         }
