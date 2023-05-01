@@ -16,6 +16,7 @@ class AVLTreeView: View() {
     private var selectedItem: String? = ""
     private val treeName = SimpleStringProperty()
     private val valueFotDeletion = SimpleStringProperty()
+
     override val root = vbox {
         hbox {
             val availableTrees = combobox<String> {
@@ -72,7 +73,7 @@ class AVLTreeView: View() {
                             value.value = ""
                         }
                     }
-                    field("Value input"){
+                    field("Key input"){
                         textfield(valueFotDeletion)
                     }
                     button("Delete node"){
