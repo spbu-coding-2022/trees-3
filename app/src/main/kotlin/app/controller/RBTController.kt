@@ -7,11 +7,15 @@ import bst.db.controllers.Neo4jController
 import javafx.collections.FXCollections
 import javafx.collections.ObservableList
 import javafx.scene.control.Label
+import javafx.scene.control.Tooltip
 import javafx.scene.layout.Pane
 import javafx.scene.paint.Color
 import javafx.scene.shape.Circle
 import javafx.scene.shape.Line
+import javafx.scene.text.Text
+import javafx.scene.text.TextBoundsType
 import tornadofx.Controller
+import kotlin.math.min
 
 class RBTController: Controller() {
     fun isNumeric(s: String): Boolean {
@@ -47,12 +51,26 @@ class RBTController: Controller() {
         val circle = Circle(circleRadius)
         circle.centerX = x
         circle.centerY = y
-        circle.fill = if (node.color == RBTNode.Color.RED) Color.RED else Color.BLACK
+        circle.fill = Color.WHITE
         circle.stroke = Color.BLACK
-        val nodeLabel = Label(node.key.toString())
-        nodeLabel.layoutX = circle.centerX - (circle.radius / 3)
-        nodeLabel.layoutY = circle.centerY - (circle.radius / 3)
-        treePane.children.addAll(circle, nodeLabel)
+
+        val nodeText = Text(node.key.toString())
+        nodeText.x = circle.centerX
+        nodeText.y = circle.centerY
+        nodeText.boundsType = TextBoundsType.VISUAL
+
+        val scale = min(circleRadius * 1.3 / nodeText.boundsInLocal.width, circleRadius * 1.3 / nodeText.boundsInLocal.height)
+        nodeText.scaleX = scale
+        nodeText.scaleY = scale
+
+        nodeText.x -= nodeText.boundsInLocal.width / 2
+        nodeText.y += nodeText.boundsInLocal.height / 3
+
+        val tooltip = Tooltip(node.value)
+        Tooltip.install(circle, tooltip)
+        Tooltip.install(nodeText, tooltip)
+
+        treePane.children.addAll(circle, nodeText)
 
         if (node.left != null) {
             val leftX = x - offsetX

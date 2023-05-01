@@ -12,6 +12,10 @@ import javafx.scene.control.Label
 import bst.db.controllers.SQLController
 import javafx.collections.FXCollections.observableArrayList
 import javafx.collections.ObservableList
+import javafx.scene.control.Tooltip
+import javafx.scene.text.Text
+import javafx.scene.text.TextBoundsType
+import kotlin.math.min
 
 class BSTController : Controller() {
     fun isNumeric(s: String): Boolean {
@@ -49,10 +53,25 @@ class BSTController : Controller() {
         circle.centerY = y
         circle.fill = Color.WHITE
         circle.stroke = Color.BLACK
-        val nodeLabel = Label(node.key.toString())
-        nodeLabel.layoutX = circle.centerX - (circle.radius / 3)
-        nodeLabel.layoutY = circle.centerY - (circle.radius / 3)
-        treePane.children.addAll(circle, nodeLabel)
+
+        val nodeText = Text(node.key.toString())
+        nodeText.x = circle.centerX
+        nodeText.y = circle.centerY
+        nodeText.boundsType = TextBoundsType.VISUAL
+
+        val scale = min(circleRadius * 1.3 / nodeText.boundsInLocal.width, circleRadius * 1.3 / nodeText.boundsInLocal.height)
+        nodeText.scaleX = scale
+        nodeText.scaleY = scale
+
+        nodeText.x -= nodeText.boundsInLocal.width / 2
+        nodeText.y += nodeText.boundsInLocal.height / 3
+
+        val tooltip = Tooltip(node.value)
+        Tooltip.install(circle, tooltip)
+        Tooltip.install(nodeText, tooltip)
+
+        treePane.children.addAll(circle, nodeText)
+
 
         if (node.left != null) {
             val leftX = x - offsetX
