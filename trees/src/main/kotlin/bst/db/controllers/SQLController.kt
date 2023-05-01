@@ -20,6 +20,7 @@ class SQLController : Controller<BSTNode<Int, String>, BSTree<Int, String>> {
             user = "test",
             password = "test-test"
         )
+        createTables()
     }
 
     override fun removeTree(treeName: String) {
@@ -56,8 +57,10 @@ class SQLController : Controller<BSTNode<Int, String>, BSTree<Int, String>> {
     }
 
     private fun createTables() {
-        SchemaUtils.create(Trees)
-        SchemaUtils.create(Nodes)
+        transaction {
+            SchemaUtils.create(Trees)
+            SchemaUtils.create(Nodes)
+        }
     }
 
     private fun SerializableNode.toNodeDao(treeDao: Tree): Node {
