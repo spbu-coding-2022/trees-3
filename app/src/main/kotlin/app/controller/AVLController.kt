@@ -1,19 +1,18 @@
 package app.controller
 
-import bst.BSTree
-import bst.nodes.BSTNode
+import bst.AVLTree
+import bst.db.controllers.JsonController
+import bst.nodes.AVLNode
+import javafx.collections.FXCollections
+import javafx.collections.ObservableList
+import javafx.scene.control.Label
 import javafx.scene.layout.Pane
 import javafx.scene.paint.Color
 import javafx.scene.shape.Circle
 import javafx.scene.shape.Line
-
 import tornadofx.Controller
-import javafx.scene.control.Label
-import bst.db.controllers.SQLController
-import javafx.collections.FXCollections.observableArrayList
-import javafx.collections.ObservableList
 
-class BSTController : Controller() {
+class AVLController: Controller() {
     fun isNumeric(s: String): Boolean {
         return try {
             s.toInt()
@@ -23,18 +22,18 @@ class BSTController : Controller() {
         }
     }
 
-    fun insertNode(tree: BSTree<Int, String>, treePane: Pane, key: Int, value: String) {
+    fun insertNode(tree: AVLTree<Int, String>, treePane: Pane, key: Int, value: String) {
         tree.insert(key, value)
         drawTree(tree, treePane)
     }
 
-    fun clearTree(tree: BSTree<Int, String>, treePane: Pane) {
+    fun clearTree(tree: AVLTree<Int, String>, treePane: Pane) {
         tree.clear()
         treePane.children.clear()
     }
 
     //make here not null check
-    fun drawTree(tree: BSTree<Int, String>, treePane: Pane) {
+    fun drawTree(tree: AVLTree<Int, String>, treePane: Pane) {
         treePane.children.clear()
         val root = tree.getRoot()
         if (root != null) {
@@ -42,7 +41,7 @@ class BSTController : Controller() {
         }
     }
 
-    private fun drawNode(node: BSTNode<Int, String>, treePane: Pane, x: Double, y: Double, offsetX: Double) {
+    private fun drawNode(node: AVLNode<Int, String>, treePane: Pane, x: Double, y: Double, offsetX: Double) {
         val circleRadius = 20.0
         val circle = Circle(circleRadius)
         circle.centerX = x
@@ -72,31 +71,30 @@ class BSTController : Controller() {
     }
 
     fun getTreesList(): ObservableList<String>? {
-        val controller = SQLController()
+        val controller = JsonController()
         val treeNames = controller.getAllTrees()
-        val values = observableArrayList<String>()
+        val values = FXCollections.observableArrayList<String>()
         treeNames.forEach {
             values.add(it)
         }
         return values
     }
-
-    fun getTreeFromDB(name: String): BSTree<Int, String>? {
-        val controller = SQLController()
+    fun getTreeFromJson(name: String): AVLTree<Int, String>? {
+        val controller = JsonController()
         val tree = controller.getTree(name)
         return tree
     }
 
     fun deleteTreeFromDB(name: String) {
-        SQLController().run {
+        JsonController().run {
             removeTree(name)
         }
     }
-    fun saveTree(tree: BSTree<Int, String>, treeName: String) {
-        val controller = SQLController()
+    fun saveTree(tree: AVLTree<Int, String>, treeName: String) {
+        val controller = JsonController()
         controller.saveTree(tree, treeName)
     }
-    fun deleteNode(value: Int, tree: BSTree<Int, String>, treePane: Pane){
+    fun deleteNode(value: Int, tree: AVLTree<Int, String>, treePane: Pane){
         tree.remove(value)
         drawTree(tree, treePane)
     }

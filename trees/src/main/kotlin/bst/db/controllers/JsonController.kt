@@ -8,10 +8,11 @@ import java.io.FileReader
 import java.io.FileWriter
 
 class JsonController : Controller<AVLNode<Int, String>, AVLTree<Int, String>> {
+    val folderPath = "json"
     override fun saveTree(tree: AVLTree<Int, String>, treeName: String) {
         val gson = Gson()
         try {
-            val writer = FileWriter("$treeName.json")
+            val writer = FileWriter("${this.folderPath}/$treeName.json")
             gson.toJson(tree, writer)
             writer.close()
         } catch (e: Exception) {
@@ -22,7 +23,7 @@ class JsonController : Controller<AVLNode<Int, String>, AVLTree<Int, String>> {
     override fun getTree(treeName: String): AVLTree<Int, String>? {
         val gson = Gson()
         return try {
-            val reader = FileReader("$treeName.json")
+            val reader = FileReader("${this.folderPath}/$treeName.json")
             val tree = gson.fromJson(reader, AVLTree<Int, String>()::class.java)
             reader.close()
             tree
@@ -33,6 +34,16 @@ class JsonController : Controller<AVLNode<Int, String>, AVLTree<Int, String>> {
     }
 
     override fun removeTree(treeName: String) {
-        File("$treeName.json").delete()
+        File("${this.folderPath}/$treeName.json").delete()
+    }
+
+    fun getAllTrees(): List<String>{
+        val jsonFiles = File(folderPath).listFiles{ file -> file.extension == "json" }
+        val jsonNames = mutableListOf<String>()
+        jsonFiles?.forEach { file ->
+            jsonNames.add(file.name.removeSuffix(".json"))
+//            jsonNames.add(file.name)
+        }
+        return jsonNames
     }
 }
