@@ -19,6 +19,22 @@ class BinarySearchTreeView : View() {
     private val treeName = SimpleStringProperty()
     private val valueFotDeletion = SimpleStringProperty()
 
+    init {
+        // Add listeners to the width and height properties of the scene
+        val sizeChangeListener = ChangeListener<Number> { _, _, _ ->
+            resizeTreePane()
+        }
+
+        primaryStage.widthProperty().addListener(sizeChangeListener)
+        primaryStage.heightProperty().addListener(sizeChangeListener)
+    }
+
+    private fun resizeTreePane() {
+        treePane.prefWidthProperty().bind(root.widthProperty())
+        treePane.prefHeightProperty().bind(root.heightProperty())
+        controller.drawTree(tree, treePane)
+    }
+
     override val root = vbox {
         hbox {
             val availableTrees = combobox<String> {
