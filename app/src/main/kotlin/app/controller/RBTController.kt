@@ -2,13 +2,12 @@ package app.controller
 
 import bst.RedBlackTree
 import bst.nodes.RBTNode
-import bst.db.controllers.JsonController
 import bst.db.controllers.Neo4jController
 import javafx.collections.FXCollections
 import javafx.collections.ObservableList
-import javafx.scene.control.Label
 import javafx.scene.control.Tooltip
 import javafx.scene.layout.Pane
+import javafx.scene.layout.StackPane
 import javafx.scene.paint.Color
 import javafx.scene.shape.Circle
 import javafx.scene.shape.Line
@@ -49,28 +48,23 @@ class RBTController: Controller() {
     private fun drawNode(node: RBTNode<Int, String>, treePane: Pane, x: Double, y: Double, offsetX: Double) {
         val circleRadius = 20.0
         val circle = Circle(circleRadius)
-        circle.centerX = x
-        circle.centerY = y
         circle.fill = Color.WHITE
         circle.stroke = Color.BLACK
 
         val nodeText = Text(node.key.toString())
-        nodeText.x = circle.centerX
-        nodeText.y = circle.centerY
         nodeText.boundsType = TextBoundsType.VISUAL
 
         val scale = min(circleRadius * 1.3 / nodeText.boundsInLocal.width, circleRadius * 1.3 / nodeText.boundsInLocal.height)
         nodeText.scaleX = scale
         nodeText.scaleY = scale
 
-        nodeText.x -= nodeText.boundsInLocal.width / 2
-        nodeText.y += nodeText.boundsInLocal.height / 3
+        val nodeStackPane = StackPane(circle, nodeText)
+        nodeStackPane.relocate(x - circleRadius, y - circleRadius)
 
-        val tooltip = Tooltip(node.value)
-        Tooltip.install(circle, tooltip)
-        Tooltip.install(nodeText, tooltip)
+        val tooltip = Tooltip("value: ${node.value}")
+        Tooltip.install(nodeStackPane, tooltip)
 
-        treePane.children.addAll(circle, nodeText)
+        treePane.children.add(nodeStackPane)
 
         if (node.left != null) {
             val leftX = x - offsetX

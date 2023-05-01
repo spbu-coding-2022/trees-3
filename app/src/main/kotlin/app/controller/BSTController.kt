@@ -8,11 +8,11 @@ import javafx.scene.shape.Circle
 import javafx.scene.shape.Line
 
 import tornadofx.Controller
-import javafx.scene.control.Label
 import bst.db.controllers.SQLController
 import javafx.collections.FXCollections.observableArrayList
 import javafx.collections.ObservableList
 import javafx.scene.control.Tooltip
+import javafx.scene.layout.StackPane
 import javafx.scene.text.Text
 import javafx.scene.text.TextBoundsType
 import kotlin.math.min
@@ -49,29 +49,23 @@ class BSTController : Controller() {
     private fun drawNode(node: BSTNode<Int, String>, treePane: Pane, x: Double, y: Double, offsetX: Double) {
         val circleRadius = 20.0
         val circle = Circle(circleRadius)
-        circle.centerX = x
-        circle.centerY = y
         circle.fill = Color.WHITE
         circle.stroke = Color.BLACK
 
         val nodeText = Text(node.key.toString())
-        nodeText.x = circle.centerX
-        nodeText.y = circle.centerY
         nodeText.boundsType = TextBoundsType.VISUAL
 
         val scale = min(circleRadius * 1.3 / nodeText.boundsInLocal.width, circleRadius * 1.3 / nodeText.boundsInLocal.height)
         nodeText.scaleX = scale
         nodeText.scaleY = scale
 
-        nodeText.x -= nodeText.boundsInLocal.width / 2
-        nodeText.y += nodeText.boundsInLocal.height / 3
+        val nodeStackPane = StackPane(circle, nodeText)
+        nodeStackPane.relocate(x - circleRadius, y - circleRadius)
 
-        val tooltip = Tooltip(node.value)
-        Tooltip.install(circle, tooltip)
-        Tooltip.install(nodeText, tooltip)
+        val tooltip = Tooltip("value: ${node.value}")
+        Tooltip.install(nodeStackPane, tooltip)
 
-        treePane.children.addAll(circle, nodeText)
-
+        treePane.children.add(nodeStackPane)
 
         if (node.left != null) {
             val leftX = x - offsetX
