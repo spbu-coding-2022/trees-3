@@ -12,6 +12,7 @@ import javafx.scene.control.Label
 import bst.db.controllers.SQLController
 import javafx.collections.FXCollections.observableArrayList
 import javafx.collections.ObservableList
+import kotlin.reflect.jvm.internal.impl.resolve.constants.KClassValue.Value
 
 class BSTController : Controller() {
     fun isNumeric(s: String): Boolean {
@@ -90,13 +91,15 @@ class BSTController : Controller() {
 
     fun deleteTreeFromDB(name: String) {
         SQLController().run {
-            deleteTree(name)
+            removeTree(name)
         }
     }
-    fun saveTree(tree: BSTree<Int, String>) {
+    fun saveTree(tree: BSTree<Int, String>, treeName: String) {
         val controller = SQLController()
-        controller.saveTreeToDB(tree)
+        controller.saveTree(tree, treeName)
+    }
+    fun deleteNode(value: Int, tree: BSTree<Int, String>, treePane: Pane){
+        tree.remove(value)
+        drawTree(tree, treePane)
     }
 }
-
-

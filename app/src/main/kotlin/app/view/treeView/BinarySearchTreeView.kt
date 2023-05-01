@@ -17,6 +17,7 @@ class BinarySearchTreeView : View() {
     private var trees = controller.getTreesList()
     private var selectedItem: String? = ""
     private val treeName = SimpleStringProperty()
+    private val valueFotDeletion = SimpleStringProperty()
     override val root = vbox {
         hbox {
             val availableTrees = combobox<String> {
@@ -72,19 +73,36 @@ class BinarySearchTreeView : View() {
                             key.value = ""
                             value.value = ""
                         }
-
                     }
+                    field("Value input"){
+                        textfield(valueFotDeletion)
+                    }
+                    button("Delete node"){
+                        action {
+                            if (controller.isNumeric(valueFotDeletion.value)){
+                                controller.deleteNode(valueFotDeletion.value.toInt(), tree, treePane)
+                            }
+                            else{
+                                alert(type = Alert.AlertType.ERROR, header = "Deletion Error")
+                            }
+                        }
+                    }
+
                     field("Input tree name") {
                         textfield(treeName)
                     }
                     button("Save tree") {
                         action {
                             if (tree.getRoot() != null) {
-                                tree.treeName = treeName.value
-                                controller.saveTree(tree)
+//                                tree.treeName = treeName.value
+                                controller.saveTree(tree, treeName.value)
                                 if (!availableTrees.items.contains(treeName.value)) {
                                     availableTrees.items.add(treeName.value)
                                 }
+                            }
+                            else{
+                                alert(type = Alert.AlertType.ERROR, header = "Can not save tree with empty root")
+
                             }
                         }
                     }

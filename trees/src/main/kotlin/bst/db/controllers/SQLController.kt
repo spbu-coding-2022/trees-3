@@ -8,10 +8,8 @@ import bst.db.models.sql.Trees
 import bst.db.serializeClasses.SerializableNode
 import bst.db.serializeClasses.SerializableTree
 import bst.nodes.BSTNode
-import org.jetbrains.exposed.sql.Database
-import org.jetbrains.exposed.sql.SchemaUtils
-import org.jetbrains.exposed.sql.StdOutSqlLogger
-import org.jetbrains.exposed.sql.addLogger
+import org.jetbrains.exposed.exceptions.ExposedSQLException
+import org.jetbrains.exposed.sql.*
 import org.jetbrains.exposed.sql.transactions.transaction
 
 class SQLController : Controller<BSTNode<Int, String>, BSTree<Int, String>> {
@@ -26,8 +24,13 @@ class SQLController : Controller<BSTNode<Int, String>, BSTree<Int, String>> {
 
     override fun removeTree(treeName: String) {
         transaction {
-            val treeEntity = Tree.find { (Trees.name eq treeName) }.firstOrNull()
-            treeEntity?.delete()
+            try{
+                Tree.find { (Trees.name eq treeName) }
+                    .firstOrNull()?.delete()
+            }
+            catch (e: ExposedSQLException){
+                println("Tree does not exists")
+            }
         }
     }
 
@@ -144,5 +147,17 @@ class SQLController : Controller<BSTNode<Int, String>, BSTree<Int, String>> {
             deserializedTree = findTree(treeName)
         }
         return deserializeTree(deserializedTree)
+    }
+    fun getAllTrees(): List<String> {
+        val notes = mutableListOf<String>()
+        connectDB()
+        transaction {
+            Trees.selectAll().forEach {
+                val name = it[Trees.name]
+                notes.add(name)
+            }
+        }
+
+        return notes
     }
 }
