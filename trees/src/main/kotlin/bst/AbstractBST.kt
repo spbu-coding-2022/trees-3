@@ -57,6 +57,7 @@ abstract class AbstractBST<K : Comparable<K>, V, Self : BinaryNode<K, V, Self>> 
      */
 
     protected abstract fun initNode(key: K, value: V): Self
+
     /**
      * Inserts a new node with the given key and value into this binary search tree\.
      * @param key the key of the new node\.
