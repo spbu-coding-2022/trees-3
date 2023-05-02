@@ -77,7 +77,7 @@ class AVLController : Controller() {
         treePane.children.clear()
         val root = tree.getRoot()
         if (root != null) {
-            drawNode(root, treePane, treePane.width / 2.0, 50.0, treePane.width / 4.0)
+            drawNode(root, treePane, treePane.width / 2.0, treePane.width / 2.0, 250.0)
         }
     }
 

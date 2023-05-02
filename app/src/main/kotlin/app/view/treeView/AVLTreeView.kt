@@ -4,6 +4,7 @@ import app.controller.AVLController
 import bst.AVLTree
 import javafx.beans.property.SimpleStringProperty
 import javafx.scene.control.Alert
+import javafx.scene.control.ScrollPane
 import javafx.scene.layout.Pane
 import tornadofx.ChangeListener
 import tornadofx.View
@@ -16,7 +17,7 @@ import tornadofx.field
 import tornadofx.fieldset
 import tornadofx.form
 import tornadofx.hbox
-import tornadofx.plusAssign
+import tornadofx.scrollpane
 import tornadofx.seconds
 import tornadofx.textfield
 import tornadofx.vbox
@@ -148,11 +149,20 @@ class AVLTreeView : View() {
                 replaceWith(RedBlackTreeView::class, ViewTransition.Slide(0.3.seconds, ViewTransition.Direction.LEFT))
             }
         }
-        this += treePane
-        treePane.apply {
-            minWidth = 600.0
-            minHeight = 400.0
-            style = "-fx-border-color: black;"
+        scrollpane {
+            content = treePane
+            isPannable = true
+            hbarPolicy = ScrollPane.ScrollBarPolicy.AS_NEEDED
+            vbarPolicy = ScrollPane.ScrollBarPolicy.AS_NEEDED
+
+            hvalue = 0.5
+            vvalue = 0.5
+
+            treePane.apply {
+                minWidth = 5000.0
+                minHeight = 5000.0
+                style = "-fx-border-color: black;"
+            }
         }
     }
 }
