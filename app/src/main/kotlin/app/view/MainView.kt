@@ -20,6 +20,8 @@ class MainView : View() {
      */
 
     override val root = vbox {
+        primaryStage.minWidth = 400.0
+        primaryStage.minHeight = 600.0
         add(tree)
     }
 }
