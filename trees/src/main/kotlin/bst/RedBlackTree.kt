@@ -2,24 +2,61 @@ package bst
 
 import bst.nodes.RBTNode
 
+/**
+ * RedBlackTree represents a red-black tree data structure and extends the BalancingTree class.
+ *
+ * @param <K> The type of the keys in the tree, which must be comparable.
+ * @param <V> The type of the values in the tree.
+ * @property key The key of the root node of the tree.
+ * @property value The value of the root node of the tree.
+ * @constructor Creates a new instance of the RedBlackTree class with the given key and value.
+ */
 class RedBlackTree<K : Comparable<K>, V>(@Transient val key: K? = null, @Transient val value: V? = null) : BalancingTree<K, V, RBTNode<K, V>>() {
 
+    /**
+     * Initializes a new Red-Black Tree node with the given key and value.
+     *
+     * @param key The key of the new node.
+     * @param value The value of the new node.
+     * @return The new node.
+     */
     override fun initNode(key: K, value: V): RBTNode<K, V> = RBTNode(key, value)
 
+    /**
+     * Initializes the root node of the tree with the given key and value if they are not null.
+     */
     init {
         if (key != null && value != null) {
             rootNode = initNode(key, value)
         }
     }
 
+    /**
+     * Checks if the given Red-Black Tree node is red.
+     *
+     * @param node The node to check.
+     * @return true if the node is not null and has the color red, false otherwise.
+     */
     private fun isRed(node: RBTNode<K, V>?): Boolean {
         return node != null && node.color == RBTNode.Color.RED
     }
 
+    /**
+     * Inserts a new node with the given key and value into the Red-Black Tree.
+     *
+     * @param key The key of the new node.
+     * @param value The value of the new node.
+     */
     override fun insert(key: K, value: V) {
         insertNode(key, value)
     }
 
+    /**
+     * Inserts a new node with the given key and value into the Red-Black Tree.
+     *
+     * @param key The key of the new node.
+     * @param value The value of the new node.
+     */
     private fun insertNode(key: K, value: V) {
         if (rootNode == null) {
             /* Empty tree case */
@@ -95,11 +132,25 @@ class RedBlackTree<K : Comparable<K>, V>(@Transient val key: K? = null, @Transie
         rootNode?.color = RBTNode.Color.BLACK
     }
 
+    /**
+     * Removes the node with the given key from the binary search tree.
+     * This function calls the removeNode function with the given key as its parameter.
+     * @param key the key of the node to be removed
+     */
     override fun remove(key: K) {
         removeNode(key)
     }
 
+    /**
+     * Update the root of the Red-Black tree to the head child node and make the root black for simplified logic.
+     * @return 1 after the root is updated and colored black
+     * Removes the node with the given key from the binary search tree.
+     * @param key the key of the node to be removed
+     * @throws IllegalStateException if the root node of the tree is null
+     */
+
     private fun removeNode(key: K): Int {
+        // Code implementation for removing node from the binary search tree
         if (rootNode != null) {
             /*
               False tree root.
@@ -209,7 +260,15 @@ class RedBlackTree<K : Comparable<K>, V>(@Transient val key: K? = null, @Transie
         return 1
     }
 
+    /**
+     * Performs a single rotation on the given node in the specified direction.
+     * @param node the node to be rotated
+     * @param dir the direction of the rotation (true for right, false for left)
+     * @return the child node after the rotation
+     */
+
     private fun rotate(node: RBTNode<K, V>, dir: Boolean): RBTNode<K, V> {
+        // Code implementation for performing a single rotation on the given node
         val childNode: RBTNode<K, V> = if (dir) {
             rotateRight(node)
         } else {
@@ -220,6 +279,13 @@ class RedBlackTree<K : Comparable<K>, V>(@Transient val key: K? = null, @Transie
         return childNode
     }
 
+    /**
+     * Performs a double rotation on the given node in the specified direction.
+     * @param node the node to be double rotated
+     * @param dir the direction of the double rotation (true for right, false for left)
+     * @return the child node after the double rotation
+     */
+
     private fun doubleRotate(node: RBTNode<K, V>, dir: Boolean): RBTNode<K, V> {
         if (dir) {
             node.left = node.left?.let { rotate(it, false) }
@@ -229,12 +295,26 @@ class RedBlackTree<K : Comparable<K>, V>(@Transient val key: K? = null, @Transie
         return rotate(node, dir)
     }
 
+    /**
+     * Rotates the given node to the left to rebalance the tree.
+     * @param node the node to be rotated to the left
+     * @return the new node after the rotation
+     * @throws IllegalStateException if the node's right child is null
+     */
+
     override fun rotateLeft(node: RBTNode<K, V>): RBTNode<K, V> {
         val right = node.right ?: throw IllegalStateException("Node's right child cannot be null")
         node.right = right.left
         right.left = node
         return right
     }
+
+    /**
+     * Rotates the given node to the right to rebalance the tree.
+     * @param node the node to be rotated to the right
+     * @return the new node after the rotation
+     * @throws IllegalStateException if the node's left child is null
+     */
 
     override fun rotateRight(node: RBTNode<K, V>): RBTNode<K, V> {
         val left = node.left ?: throw IllegalStateException("Node's left child cannot be null")
