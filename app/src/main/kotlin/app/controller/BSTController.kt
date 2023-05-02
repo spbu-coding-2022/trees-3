@@ -36,7 +36,6 @@ class BSTController : Controller() {
         treePane.children.clear()
     }
 
-    // make here not null check
     fun drawTree(tree: BSTree<Int, String>, treePane: Pane) {
         treePane.children.clear()
         val root = tree.getRoot()

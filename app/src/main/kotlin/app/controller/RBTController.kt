@@ -36,7 +36,6 @@ class RBTController : Controller() {
         treePane.children.clear()
     }
 
-    // make here not null check
     fun drawTree(tree: RedBlackTree<Int, String>, treePane: Pane) {
         treePane.children.clear()
         val root = tree.getRoot()
@@ -48,10 +47,11 @@ class RBTController : Controller() {
     private fun drawNode(node: RBTNode<Int, String>, treePane: Pane, x: Double, y: Double, offsetX: Double) {
         val circleRadius = 20.0
         val circle = Circle(circleRadius)
-        circle.fill = Color.WHITE
+        circle.fill = if (node.color == RBTNode.Color.RED) Color.RED else Color.BLACK
         circle.stroke = Color.BLACK
 
         val nodeText = Text(node.key.toString())
+        nodeText.fill = if (circle.fill == Color.RED) Color.BLACK else Color.WHITE
         nodeText.boundsType = TextBoundsType.VISUAL
 
         val scale = min(circleRadius * 1.3 / nodeText.boundsInLocal.width, circleRadius * 1.3 / nodeText.boundsInLocal.height)

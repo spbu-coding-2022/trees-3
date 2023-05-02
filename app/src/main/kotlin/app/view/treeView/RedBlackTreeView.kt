@@ -33,7 +33,6 @@ class RedBlackTreeView : View() {
     private val valueForDeletion = SimpleStringProperty()
 
     init {
-        // Add listeners to the width and height properties of the scene
         val sizeChangeListener = ChangeListener<Number> { _, _, _ ->
             resizeTreePane()
         }
