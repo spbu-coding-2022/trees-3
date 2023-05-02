@@ -21,10 +21,12 @@ class Neo4jController : Controller<RBTNode<Int, String>, RedBlackTree<Int, Strin
         .uri("bolt://localhost")
         .credentials("neo4j", "password")
         .build()
+
     /**
      * The session factory for creating database sessions.
      */
     private val sessionFactory = SessionFactory(config, "bst")
+
     /**
      * The database session.
      */
