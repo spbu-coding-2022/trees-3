@@ -148,6 +148,7 @@ class BinarySearchTreeView : View() {
             }
         }
         scrollpane {
+            style = "-fx-background-color: transparent; -fx-border-color: transparent; -fx-focus-color: transparent;"
             content = treePane
             isPannable = true
             hbarPolicy = ScrollPane.ScrollBarPolicy.NEVER
