@@ -72,3 +72,6 @@ And you can save red-black tree to Neo4j database
     contoller.saveTree(tree)
     val remTree = controller.loadTree("test")
 ```
+
+An example of interacting with trees through a graphical interface
+![](https://github.com/spbu-coding-2022/trees-3/blob/add-ui/readme_gif/example1.gif)
