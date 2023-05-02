@@ -170,5 +170,4 @@ class AVLTree<K : Comparable<K>, V>(@Transient val key: K? = null, @Transient va
         updateHeight(right)
         return right
     }
-
 }

@@ -26,7 +26,6 @@ abstract class AbstractBST<K : Comparable<K>, V, Self : BinaryNode<K, V, Self>> 
 
     /**
      * Sets the name of this binary search tree.
-     *
      * @param treeName the name of this binary search tree.
      */
 
@@ -51,34 +50,31 @@ abstract class AbstractBST<K : Comparable<K>, V, Self : BinaryNode<K, V, Self>> 
     }
 
     /**
-    * Initializes a new binary node with the given key and value\.
-    *
-    * @param key the key of the new node\.
-    * @param value the value of the new node\.
-    * @return a new binary node with the given key and value\.
-    */
+     * Initializes a new binary node with the given key and value\.
+     * @param key the key of the new node\.
+     * @param value the value of the new node\.
+     * @return a new binary node with the given key and value\.
+     */
 
     protected abstract fun initNode(key: K, value: V): Self
-
     /**
-    * Inserts a new node with the given key and value into this binary search tree\.
-    *
-    * @param key the key of the new node\.
-    * @param value the value of the new node\.
-    */
+     * Inserts a new node with the given key and value into this binary search tree\.
+     * @param key the key of the new node\.
+     * @param value the value of the new node\.
+     */
 
     override fun insert(key: K, value: V) {
         rootNode = insertNode(rootNode, key, value)
     }
 
     /**
-    * Inserts a new node with the given key and value into the binary search tree rooted at the given node\.
-    *
-    * @param node the root node of the binary search tree to insert the new node into\.
-    * @param key the key of the new node\.
-    * @param value the value of the new node\.
-    * @return the root node of the binary search tree after the new node has been inserted\.
-    */
+     * Inserts a new node with the given key and value into the binary search tree rooted at the given node\.
+     *
+     * @param node the root node of the binary search tree to insert the new node into\.
+     * @param key the key of the new node\.
+     * @param value the value of the new node\.
+     * @return the root node of the binary search tree after the new node has been inserted\.
+     */
 
     protected open fun insertNode(node: Self?, key: K, value: V): Self {
         if (node == null) return initNode(key, value)

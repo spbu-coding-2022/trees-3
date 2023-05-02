@@ -74,4 +74,4 @@ And you can save red-black tree to Neo4j database
 ```
 
 An example of interacting with trees through a graphical interface
-![](https://github.com/spbu-coding-2022/trees-3/blob/add-ui/readme_gif/example1.gif)
+![Example gif](https://github.com/spbu-coding-2022/trees-3/blob/add-ui/readme_gif/example1.gif)
