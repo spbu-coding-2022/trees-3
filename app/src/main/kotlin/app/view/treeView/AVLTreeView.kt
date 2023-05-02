@@ -1,10 +1,25 @@
 package app.view.treeView
+
 import app.controller.AVLController
 import bst.AVLTree
 import javafx.beans.property.SimpleStringProperty
 import javafx.scene.control.Alert
 import javafx.scene.layout.Pane
-import tornadofx.*
+import tornadofx.ChangeListener
+import tornadofx.View
+import tornadofx.ViewTransition
+import tornadofx.action
+import tornadofx.alert
+import tornadofx.button
+import tornadofx.combobox
+import tornadofx.field
+import tornadofx.fieldset
+import tornadofx.form
+import tornadofx.hbox
+import tornadofx.plusAssign
+import tornadofx.seconds
+import tornadofx.textfield
+import tornadofx.vbox
 
 class AVLTreeView : View() {
     private val controller: AVLController by inject()
@@ -123,7 +138,10 @@ class AVLTreeView : View() {
         }
         button("Binary Search Tree") {
             action {
-                replaceWith(BinarySearchTreeView::class, ViewTransition.Slide(0.3.seconds, ViewTransition.Direction.LEFT))
+                replaceWith(
+                    BinarySearchTreeView::class,
+                    ViewTransition.Slide(0.3.seconds, ViewTransition.Direction.LEFT)
+                )
             }
         }
         button("Red Black Tree") {

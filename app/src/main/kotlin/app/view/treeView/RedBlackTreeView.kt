@@ -5,7 +5,21 @@ import bst.RedBlackTree
 import javafx.beans.property.SimpleStringProperty
 import javafx.scene.control.Alert
 import javafx.scene.layout.Pane
-import tornadofx.*
+import tornadofx.ChangeListener
+import tornadofx.View
+import tornadofx.ViewTransition
+import tornadofx.action
+import tornadofx.alert
+import tornadofx.button
+import tornadofx.combobox
+import tornadofx.field
+import tornadofx.fieldset
+import tornadofx.form
+import tornadofx.hbox
+import tornadofx.plusAssign
+import tornadofx.seconds
+import tornadofx.textfield
+import tornadofx.vbox
 
 class RedBlackTreeView : View() {
     private val controller: RBTController by inject()

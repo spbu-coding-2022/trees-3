@@ -1,6 +1,5 @@
 package bst
 
-import bst.nodes.BSTNode
 import bst.nodes.BinaryNode
 
 abstract class AbstractBST<K : Comparable<K>, V, Self : BinaryNode<K, V, Self>> : Tree<K, V> {
@@ -8,7 +7,7 @@ abstract class AbstractBST<K : Comparable<K>, V, Self : BinaryNode<K, V, Self>> 
     var treeName: String = ""
     internal var rootNode: Self? = null
 
-    fun setName(treeName: String){
+    fun setName(treeName: String) {
         this.treeName = treeName
     }
 

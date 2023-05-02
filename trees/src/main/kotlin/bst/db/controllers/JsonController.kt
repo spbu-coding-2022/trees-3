@@ -37,12 +37,11 @@ class JsonController : Controller<AVLNode<Int, String>, AVLTree<Int, String>> {
         File("${this.folderPath}/$treeName.json").delete()
     }
 
-    fun getAllTrees(): List<String>{
-        val jsonFiles = File(folderPath).listFiles{ file -> file.extension == "json" }
+    fun getAllTrees(): List<String> {
+        val jsonFiles = File(folderPath).listFiles { file -> file.extension == "json" }
         val jsonNames = mutableListOf<String>()
         jsonFiles?.forEach { file ->
             jsonNames.add(file.name.removeSuffix(".json"))
-//            jsonNames.add(file.name)
         }
         return jsonNames
     }
