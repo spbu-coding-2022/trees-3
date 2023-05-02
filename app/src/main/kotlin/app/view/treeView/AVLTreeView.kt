@@ -152,8 +152,8 @@ class AVLTreeView : View() {
         scrollpane {
             content = treePane
             isPannable = true
-            hbarPolicy = ScrollPane.ScrollBarPolicy.AS_NEEDED
-            vbarPolicy = ScrollPane.ScrollBarPolicy.AS_NEEDED
+            hbarPolicy = ScrollPane.ScrollBarPolicy.NEVER
+            vbarPolicy = ScrollPane.ScrollBarPolicy.NEVER
 
             hvalue = 0.5
             vvalue = 0.5
@@ -161,7 +161,6 @@ class AVLTreeView : View() {
             treePane.apply {
                 minWidth = 5000.0
                 minHeight = 5000.0
-                style = "-fx-border-color: black;"
             }
         }
     }
