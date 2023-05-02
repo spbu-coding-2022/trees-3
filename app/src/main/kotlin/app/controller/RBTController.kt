@@ -28,7 +28,7 @@ class RBTController : Controller() {
      * Determines whether a given string can be parsed as an integer.
      *
      * @param s The string to check.
-     * @return  True if the string can be parsed as an integer, false otherwise.
+     * @return True if the string can be parsed as an integer, false otherwise.
      */
 
     fun isNumeric(s: String): Boolean {

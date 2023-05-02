@@ -149,7 +149,7 @@ class AVLController : Controller() {
      * Retrieves an AVL tree with the given name from the JSON controller.
      *
      * @param name The name of the tree to retrieve.
-     * @return     The AVL tree with the given name, or null if it doesn't exist.
+     * @return The AVL tree with the given name, or null if it doesn't exist.
      */
 
     fun getTreeFromJson(name: String): AVLTree<Int, String>? {

@@ -69,7 +69,7 @@ class BSTController : Controller() {
     /**
      * Draws the given binary search tree on the given pane.
      *
-     * @param tree      The binary search tree to draw.
+     * @param tree The binary search tree to draw.
      * @param treePane  The pane where the tree is to be drawn.
      */
 
@@ -212,5 +212,4 @@ class BSTController : Controller() {
         // Redraws the binary search tree on the given pane.
         drawTree(tree, treePane)
     }
-
 }
