@@ -99,8 +99,8 @@ class RedBlackTreeView : View() {
                             } else {
                                 alert(type = Alert.AlertType.ERROR, header = "Insertion Error")
                             }
-                            key.value = ""
-                            value.value = ""
+                            key.value = null
+                            value.value = null
                         }
                     }
                     field("Value") {

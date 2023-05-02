@@ -100,8 +100,8 @@ class AVLTreeView : View() {
                             } else {
                                 alert(type = Alert.AlertType.ERROR, header = "Insertion Error")
                             }
-                            key.value = ""
-                            value.value = ""
+                            key.value = null
+                            value.value = null
                         }
                     }
                     field("Key") {
@@ -123,7 +123,6 @@ class AVLTreeView : View() {
                     button("Save tree") {
                         action {
                             if (tree.getRoot() != null) {
-//                                tree.treeName = treeName.value
                                 controller.saveTree(tree, treeName.value)
                                 if (!availableTrees.items.contains(treeName.value)) {
                                     availableTrees.items.add(treeName.value)
